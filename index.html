@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#3B57B8;
+    --blue-dark:#2A3F8C;
+    --sage:#6B7A3E;
+    --rust:#B5583F;
+    --cream:#FAF8F4;
+    --ink:#1E2233;
+    --ink-soft:#5B5F6E;
+    --line:#E4E1D8;
+    --white:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    min-height:100vh;
+  }
+  .shell{
+    max-width:640px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    padding:0 24px;
+  }
+  header.top{
+    padding:24px 0 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .logo{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:18px;
+    color:var(--blue);
+    letter-spacing:-0.01em;
+  }
+  .eyebrow{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+  }
+  .progress-wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding-bottom:12px;
+  }
+  .progress-track{
+    flex:1;
+    height:4px;
+    background:var(--line);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--blue);
+    width:0%;
+    transition:width .35s ease;
+  }
+  .progress-label{
+    font-size:12px;
+    color:var(--ink-soft);
+    font-variant-numeric:tabular-nums;
+    min-width:36px;
+    text-align:right;
+  }
+  main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:32px 0 40px;
+  }
+  .section-tag{
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--sage);
+    margin-bottom:14px;
+  }
+  h1.q-title{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:26px;
+    line-height:1.35;
+    margin:0 0 8px;
+    color:var(--ink);
+  }
+  p.q-sub{
+    font-size:14px;
+    color:var(--ink-soft);
+    margin:0 0 24px;
+    line-height:1.6;
+  }
+  .info-block{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:24px;
+  }
+  .info-item{
+    display:flex;
+    gap:12px;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+    font-size:14px;
+    line-height:1.5;
+  }
+  .info-item:last-child{border-bottom:none;}
+  .info-item b{color:var(--blue);min-width:88px;flex-shrink:0;}
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .opt{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    background:var(--white);
+    cursor:pointer;
+    font-size:15px;
+    transition:border-color .15s, background .15s;
+    user-select:none;
+  }
+  .opt:hover{border-color:var(--blue);}
+  .opt.selected{
+    border-color:var(--blue);
+    background:#EEF1FB;
+  }
+  .opt .mark{
+    width:18px;height:18px;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .opt.multi .mark{border-radius:5px;}
+  .opt.selected .mark{border-color:var(--blue);background:var(--blue);}
+  .opt.selected .mark::after{
+    content:'';
+    width:8px;height:8px;
+    border-radius:50%;
+    background:var(--white);
+  }
+  .opt.multi.selected .mark::after{
+    width:9px;height:6px;
+    border-radius:0;
+    border-left:2px solid var(--white);
+    border-bottom:2px solid var(--white);
+    background:none;
+    transform:rotate(-45deg) translate(1px,-1px);
+  }
+  .other-input{
+    margin-top:8px;
+    width:100%;
+    padding:12px 14px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+  }
+  input[type=text], input[type=number], textarea{
+    width:100%;
+    padding:14px 16px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    background:var(--white);
+  }
+  textarea{min-height:110px;resize:vertical;font-family:'Inter',sans-serif;}
+  input:focus, textarea:focus{outline:none;border-color:var(--blue);}
+  .scale-row{
+    display:flex;
+    gap:8px;
+    margin-top:6px;
+  }
+  .scale-btn{
+    flex:1;
+    aspect-ratio:1;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    background:var(--white);
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:18px;
+    cursor:pointer;
+    color:var(--ink-soft);
+  }
+  .scale-btn.selected{
+    border-color:var(--blue);
+    background:var(--blue);
+    color:var(--white);
+  }
+  .scale-labels{
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:8px;
+  }
+  .hint{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:6px;
+  }
+  footer.nav{
+    position:sticky;
+    bottom:0;
+    background:var(--cream);
+    padding:10px 0 28px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  button.nav-btn{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    padding:14px 22px;
+    border-radius:12px;
+    border:none;
+    cursor:pointer;
+  }
+  button.back{
+    background:transparent;
+    color:var(--ink-soft);
+    border:1.5px solid var(--line);
+  }
+  button.forward{
+    background:var(--blue);
+    color:var(--white);
+    flex:1;
+  }
+  button.forward:disabled{
+    background:#C7CBDD;
+    cursor:not-allowed;
+  }
+  button.forward:hover:not(:disabled){background:var(--blue-dark);}
+  .lang-screen{
+    min-height:70vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+  .greeting{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:44px;
+    color:var(--ink);
+    opacity:1;
+    transition:opacity .4s ease;
+    margin-bottom:36px;
+    min-height:56px;
+  }
+  .lang-select-label{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:18px;
+    letter-spacing:.02em;
+  }
+  .lang-buttons{
+    display:flex;
+    gap:12px;
+  }
+  .lang-btn{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    padding:14px 28px;
+    border-radius:12px;
+    border:1.5px solid var(--line);
+    background:var(--white);
+    color:var(--ink);
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .lang-btn:hover{
+    border-color:var(--blue);
+    background:#EEF1FB;
+  }
+  .done-screen{
+    text-align:center;
+    padding:60px 0;
+  }
+  .done-screen .icon{
+    font-size:48px;
+    margin-bottom:16px;
+  }
+  .done-screen h1{
+    font-family:'Fraunces',serif;
+    font-size:26px;
+    margin-bottom:10px;
+  }
+  .done-screen p{
+    color:var(--ink-soft);
+    font-size:14px;
+    line-height:1.6;
+  }
+  .error-msg{
+    color:var(--rust);
+    font-size:13px;
+    margin-top:14px;
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <span class="logo">User Survey</span>
+    <span class="eyebrow">IEB 2026</span>
+  </header>
+  <div class="progress-wrap" id="progressBar" style="display:none;">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-label" id="progressLabel">0%</span>
+  </div>
+  <main id="main"></main>
+</div>
+
+<script>
+/* ============ CONFIG ============ */
+// Google Apps Script Web App URL — deploy the companion script and paste the /exec URL here.
+const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbzvyFxVKCFbnzCS3lH4CPJT5OXlTIvNm6_HuWnCm0veNHPXKgonRkcBvI-pp8GchIsrgg/exec";
+
+/* ============ I18N HELPERS ============ */
+function isEN(a){ return a && a.country === 'English (CAD)'; }
+function L(a, kr, en){ return isEN(a) ? en : kr; }
+function LA(a, krArr, enArr){ return isEN(a) ? enArr : krArr; }
+
+/* ============ SHARED OPTION SETS ============ */
+const FACTORS_KR = ["성격","품종","크기","활동량·에너지 레벨","그루밍 난이도","알레르기 여부","훈련 난이도","주거 형태와의 적합성","예산(초기 비용+월 유지비)","가족 구성원과의 적합성(아이/노인/기존 반려동물 등)","본인이 직접 고려하지 않음 (가족 등 다른 사람이 결정)","기타"];
+const FACTORS_EN = ["Personality","Breed","Size","Activity/energy level","Grooming difficulty","Allergies","Trainability","Fit with housing type","Budget (initial cost + monthly upkeep)","Fit with family members (children, elderly, existing pets, etc.)","I wasn't the one who considered this (a family member or someone else decided)","Other"];
+const FACTORS = (a)=> LA(a, FACTORS_KR, FACTORS_EN);
+
+const ACQUIRE_KR = ["보호소","브리더","펫샵","지인","직접 구조","온라인 입양 플랫폼","기타"];
+const ACQUIRE_EN = ["Animal shelter","Breeder","Pet store","Friend or family","Rescued it myself","Online adoption platform","Other"];
+const ACQUIRE = (a)=> LA(a, ACQUIRE_KR, ACQUIRE_EN);
+
+const DEVICE_TYPES_KR = ["스마트/자동 급식기","스마트 정수기","스마트 목걸이·GPS 트래커","활동량 트래커","스마트 체중계","반려동물 카메라","자동 화장실","스마트 펫도어","건강 모니터링 기기","기타"];
+const DEVICE_TYPES_EN = ["Smart/automatic feeder","Smart water fountain","Smart collar/GPS tracker","Activity tracker","Smart pet scale","Pet camera","Automatic litter box","Smart pet door","Health monitoring device","Other"];
+const DEVICE_TYPES = (a)=> LA(a, DEVICE_TYPES_KR, DEVICE_TYPES_EN);
+
+const NOUSE_REASONS_KR = ["너무 비쌀 것 같음","필요성을 못 느낌","기술에 익숙하지 않음","어떤 게 유용할지 모름","개인정보 우려","정확성을 신뢰 못함","설정·사용이 어려워 보임","전통적인 방식 선호","구독료 부담","기타"];
+const NOUSE_REASONS_EN = ["Seems too expensive","Don't feel the need for one","Not familiar with the technology","Not sure which one would be useful","Privacy concerns","Don't trust the accuracy","Setup/use seems difficult","Prefer traditional methods","Subscription fees are a burden","Other"];
+const NOUSE_REASONS = (a)=> LA(a, NOUSE_REASONS_KR, NOUSE_REASONS_EN);
+
+const LIMIT_REASONS_KR = ["너무 비쌈","설정·사용이 어려움","데이터가 유용하지 않음","기기 간 연동 안 됨","앱이 너무 많음","추천이 일반적임","정확도·신뢰성 문제","개인정보 우려","유지관리 번거로움","구독료 부담","사용 안 함(필요성 못 느낌)","만족하며 불만 없음","기타"];
+const LIMIT_REASONS_EN = ["Too expensive","Difficult to set up or use","Data isn't very useful","Devices don't integrate well","Too many separate apps","Recommendations are too generic","Accuracy/reliability issues","Privacy concerns","Maintenance is a hassle","Subscription fees are a burden","Don't use one (don't feel the need)","Satisfied, no major complaints","Other"];
+const LIMIT_REASONS = (a)=> LA(a, LIMIT_REASONS_KR, LIMIT_REASONS_EN);
+
+const TOP_FEATURES_KR = ["라이프스타일 기반 맞춤 반려동물·품종 매칭","활동·행동 모니터링","식사·수분 섭취 모니터링","체중 및 건강 트래킹","건강 관련 알림","AI 기반 맞춤형 케어 추천","여러 스마트기기를 하나의 앱에서 통합 관리","초보 반려인을 위한 가이드","반려동물 입양·매칭 지원","신뢰할 수 있는 반려동물 케어 정보·자료 제공","기타"];
+const TOP_FEATURES_EN = ["Personalized pet/breed matching based on lifestyle","Activity/behavior monitoring","Feeding/hydration monitoring","Weight and wellness tracking","Health-related alerts","AI-powered personalized care recommendations","Managing multiple smart devices in one app","Guidance for new pet owners","Pet adoption/matching support","Access to trusted pet care information","Other"];
+const TOP_FEATURES = (a)=> LA(a, TOP_FEATURES_KR, TOP_FEATURES_EN);
+
+const MATCH_INPUTS_KR = ["주거환경","활동량","예산","알레르기","가족 구성원","그루밍(털 관리 등)에 할애 가능한 시간","성격 선호","기타"];
+const MATCH_INPUTS_EN = ["Living environment","Activity level","Budget","Allergies","Family members","Time available for grooming","Personality preference","Other"];
+const MATCH_INPUTS = (a)=> LA(a, MATCH_INPUTS_KR, MATCH_INPUTS_EN);
+
+const DEVICE_INFO_KR = [
+  ["스마트 급식기","정해진 시간과 양에 맞춰 자동으로 사료를 급여하는 기기"],
+  ["반려동물 카메라","외출 중에도 반려동물의 모습을 실시간으로 확인할 수 있는 카메라"],
+  ["스마트 체중계","반려동물의 체중 변화를 자동으로 측정하고 기록하는 저울"],
+  ["활동량 트래커","목걸이 등에 부착해 반려동물의 움직임과 활동량을 추적하는 기기"],
+  ["스마트 정수기","수분 섭취량을 감지하고 신선한 물을 자동 공급하는 급수기"]
+];
+const DEVICE_INFO_EN = [
+  ["Smart feeder","Automatically dispenses food at set times and amounts"],
+  ["Pet camera","Lets you check in on your pet in real time while you're away"],
+  ["Smart pet scale","Automatically measures and logs your pet's weight over time"],
+  ["Activity tracker","Worn on a collar to track your pet's movement and activity"],
+  ["Smart water fountain","Detects water intake and automatically supplies fresh water"]
+];
+const DEVICE_INFO = (a)=> LA(a, DEVICE_INFO_KR, DEVICE_INFO_EN);
+
+/* ============ STEP DEFINITIONS ============ */
+// type: info | text | number | single | multi | scale | divider
+// groups: 'all' or array of ['current','past','first']
+// showIf: function(a) => bool
+const steps = [
+  {id:'name', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'text', title:(a)=>L(a,'이름을 알려주세요.','What is your name?'), groups:'all'},
+  {id:'age', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'number', title:(a)=>L(a,'만 나이를 입력해주세요.','What is your age?'), groups:'all'},
+  {id:'household', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 가구 형태를 가장 잘 설명하는 것은?','Which best describes your current household?'),
+    options:(a)=> LA(a, ['1인 가구','부부/커플 (자녀 없음)','자녀가 있는 가족','한부모 가족','룸메이트/셰어하우스','다세대 가구 (조부모 포함 등)','기타'], ['Living alone','Couple/partners (no children)','Family with children','Single-parent family','Roommates/shared housing','Multi-generational household (incl. grandparents)','Other']),
+    groups:'all'},
+  {id:'housing', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 거주 형태는?','What type of home do you currently live in?'),
+    options:(a)=> isEN(a) ? ['Apartment/condominium','Townhouse','Detached house','Semi-detached house','Student residence','Other'] : ['아파트','오피스텔','빌라·연립주택','단독주택','원룸','기숙사','기타'],
+    groups:'all'},
+  {id:'ownership', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 거주지 소유 형태는?','What is your housing ownership status?'),
+    options:(a)=> LA(a, ['본인 소유','임차 (전세/월세)','부모님·가족 명의 주택에 거주 (무상)','기타'], ['I own it','I rent it','Living in a family member\'s home (no rent)','Other']),
+    groups:'all'},
+
+  {id:'route_current', section:(a)=>L(a,'Section 2 · 반려동물 현황','Section 2 · Pet Ownership Status'), type:'single', title:(a)=>L(a,'현재 반려동물을 키우고 있나요?','Do you currently own a pet?'),
+    options:(a)=> LA(a, ['예, 키우고 있어요','아니오'], ['Yes, I currently own a pet','No']), groups:'all'},
+  {id:'route_past', section:(a)=>L(a,'Section 2 · 반려동물 현황','Section 2 · Pet Ownership Status'), type:'single', title:(a)=>L(a,'이전에 반려동물을 키운 적이 있나요?','Have you owned a pet before?'),
+    options:(a)=> LA(a, ['예, 키운 적 있어요','아니오, 키운 적 없어요'], ['Yes, I have before','No, never']),
+    groups:'all', showIf:(a)=> a.route_current==='아니오' || a.route_current==='No'},
+
+  // ---- Section 2 : current + past merged ----
+  {id:'pet_type', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'multi',
+    title:(a)=> a.__group==='past' ? L(a,'이전에 키웠던 반려동물 종류를 모두 선택해주세요.','Select all the types of pets you owned before.') : L(a,'현재 키우고 있는 반려동물 종류를 모두 선택해주세요.','Select all the types of pets you currently own.'),
+    options:(a)=> LA(a, ['개','고양이','기타'], ['Dog','Cat','Other']), groups:['current','past']},
+  {id:'pet_count', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'countByType', title:(a)=>L(a,'종류별 마리 수를 입력해주세요.','Please enter the number of pets for each type.'), groups:['current','past']},
+  {id:'acquire', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'single', title:(a)=>L(a,'가장 최근 반려동물을 어떻게 맞이했나요?','How did you get your most recent pet?'), options:ACQUIRE, groups:['current','past']},
+  {id:'factors', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'multi', title:(a)=>L(a,'그 반려동물을 선택할 때 고려한 요소는 무엇이었나요?','What factors did you consider when choosing that pet?'), options:FACTORS, groups:['current','past']},
+  {id:'reason', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'특별히 그 반려동물을 선택하게 된 이유가 있었다면 자유롭게 적어주세요.','If there was a specific reason you chose that pet, please describe it.'), textarea:true, groups:['current','past']},
+  {id:'process_satisfaction', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'scale',
+    title:(a)=> a.__group==='past' ? L(a,'그 반려동물을 입양하는 과정에 전반적으로 얼마나 만족했나요?','Overall, how satisfied were you with the adoption process for that pet?') : L(a,'그 반려동물을 입양하는 과정에 전반적으로 얼마나 만족하나요?','Overall, how satisfied are you with the adoption process for that pet?'),
+    low:(a)=>L(a,'매우 불만족','Very dissatisfied'), high:(a)=>L(a,'매우 만족','Very satisfied'), groups:['current','past']},
+  {id:'process_regret', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양 과정에서 아쉬웠던 점이 있다면 무엇인가요?','Was there anything disappointing about the adoption process?'), textarea:true, groups:['current','past']},
+  {id:'care_hard', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text',
+    title:(a)=> a.__group==='past' ? L(a,'그 반려동물을 관리하면서 가장 어렵거나 힘들고, 스트레스받았던 점은?','What was the hardest or most stressful part of caring for that pet?') : L(a,'반려동물을 관리하면서 가장 어렵거나 힘들고, 스트레스받는 점은?','What is the hardest or most stressful part of caring for your pet?'),
+    textarea:true, groups:['current','past']},
+  {id:'no_pet_reason', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'현재 반려동물이 없는 주된 이유는?','What is the main reason you don\'t currently have a pet?'), textarea:true, groups:['past']},
+
+  // ---- Section 2-3 : first-time ----
+  {id:'first_reason', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양을 고려하게 된 계기는?','What made you start considering adopting a pet?'), textarea:true, groups:['first']},
+  {id:'first_timing', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'single', title:(a)=>L(a,'입양 예정 시기는?','When are you planning to adopt?'),
+    options:(a)=> LA(a, ['가까운 시일 내','수개월 내','1년 이내','아직 미정이지만 입양 의사 있음'], ['In the near future','Within a few months','Within a year','Not decided yet, but I intend to']), groups:['first']},
+  {id:'first_hesitation', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'multi', title:(a)=>L(a,'입양을 망설이게 하는 가장 큰 이유는?','What is the biggest reason making you hesitate to adopt?'),
+    options:(a)=> LA(a, ['준비 부족 불안','비용','주거환경','시간','정보 부족','책임감 부담','기타'], ['Anxiety about not being ready','Cost','Housing situation','Time','Lack of information','Feeling of responsibility','Other']), groups:['first']},
+  {id:'first_infosource', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'multi', title:(a)=>L(a,'입양 가능한 반려동물 정보(어떤 보호소·기관에 어떤 동물이 있는지)는 주로 어디서 찾아보나요?','Where do you usually look for information on adoptable pets (which shelters/organizations have which animals)?'),
+    options:(a)=> LA(a, ['보호소 웹사이트·앱','온라인 커뮤니티','SNS','지인','수의사','정부 공공API·사이트','기타'], ['Shelter websites/apps','Online communities','Social media','Friends or family','Veterinarian','Government public data/sites','Other']), groups:['first']},
+  {id:'first_trust', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'scale', title:(a)=>L(a,'찾아본 입양 가능한 반려동물 정보를 전반적으로 얼마나 신뢰하나요?','Overall, how much do you trust the adoptable-pet information you find?'),
+    low:(a)=>L(a,'전혀 신뢰 안 함','Not trustworthy at all'), high:(a)=>L(a,'매우 신뢰함','Very trustworthy'), groups:['first']},
+  {id:'first_info_worry', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양 가능한 반려동물 정보를 찾아볼 때 우려되거나 걱정되는 점은?','What concerns or worries you when looking for adoptable-pet information?'),
+    sub:(a)=>L(a,'예: 정보가 최신이 아님, 사진과 실제가 다름, 성격 정보 부족 등','e.g., information isn\'t up to date, photos don\'t match reality, lack of personality details, etc.'), textarea:true, groups:['first']},
+  {id:'first_worry', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양 후 반려동물을 키우게 되면 가장 걱정되는 부분은?','What worries you most about caring for a pet after adopting?'), textarea:true, groups:['first']},
+
+  // ---- Section 3 : device / app usage ----
+  {id:'device_intro', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'info',
+    title:(a)=>L(a,'다음은 반려동물 관리 도구에 대한 질문입니다.','The following questions are about pet care tools.'),
+    sub:(a)=>L(a,"여기서 '스마트 반려동물 기기'란 반려동물의 활동, 건강, 식습관 등을 자동으로 기록하고 관리를 도와주는 기기를 의미합니다. 예를 들면 아래와 같은 기기가 있습니다.","Here, 'smart pet devices' refers to devices that automatically track and help manage your pet's activity, health, and eating habits. Some examples:"),
+    body:DEVICE_INFO, groups:'all'},
+
+  {id:'app_used', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'single',
+    title:(a)=> a.__group==='past' ? L(a,'그때 반려동물 관리를 위해 사용했던 앱이 있었나요?',"Did you use an app to manage your pet's care back then?") : L(a,'현재 반려동물 관리를 위해 사용 중인 앱이 있나요?',"Do you currently use an app to manage your pet's care?"),
+    options:(a)=> LA(a, ['예','아니오'], ['Yes','No']), groups:['current','past']},
+  {id:'app_which', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'text', title:(a)=>L(a,'어떤 앱을 사용하나요(했나요)?','Which app do (did) you use?'), groups:['current','past'], showIf:(a)=>a.app_used==='예'||a.app_used==='Yes'},
+  {id:'app_satisfaction', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'scale', title:(a)=>L(a,'그 앱에 얼마나 만족하나요(했나요)?','How satisfied are (were) you with that app?'),
+    low:(a)=>L(a,'매우 불만족','Very dissatisfied'), high:(a)=>L(a,'매우 만족','Very satisfied'), groups:['current','past'], showIf:(a)=>a.app_used==='예'||a.app_used==='Yes'},
+  {id:'app_good', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'text', title:(a)=>L(a,'그 앱에서 만족하는(했던) 부분은 무엇인가요?','What do (did) you like about that app?'), textarea:true, groups:['current','past'], showIf:(a)=>a.app_used==='예'||a.app_used==='Yes'},
+  {id:'app_pain', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'text', title:(a)=>L(a,'그 앱의 가장 큰 불편함은 무엇인가요?','What is (was) the biggest frustration with that app?'), textarea:true, groups:['current','past'], showIf:(a)=>a.app_used==='예'||a.app_used==='Yes'},
+  {id:'app_expect', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'text', title:(a)=>L(a,'만약 반려동물 관리 앱을 사용하게 된다면, 기대하거나 꼭 필요하다고 생각하는 기능은 무엇인가요?','If you were to use a pet care app, what features would you expect or consider essential?'), textarea:true, groups:['current','past'], showIf:(a)=>a.app_used==='아니오'||a.app_used==='No'},
+  {id:'first_app_expect', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'text', title:(a)=>L(a,'반려동물 관리 앱이 있다면 어떤 기능을 기대하거나 꼭 필요하다고 생각하나요?','What features would you expect or consider essential in a pet care app?'), textarea:true, groups:['first']},
+
+  {id:'device_used', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'single',
+    title:(a)=> a.__group==='past' ? L(a,'그때 스마트/연결형 기기를 사용했었나요?','Did you use any smart/connected devices back then?') : L(a,'현재 반려동물을 위해 스마트/연결형 기기를 사용하고 있나요?','Do you currently use any smart/connected devices for your pet?'),
+    options:(a)=> LA(a, ['예','아니오'], ['Yes','No']), groups:['current','past']},
+  {id:'device_which', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'multi', title:(a)=>L(a,'어떤 스마트 기기를 사용하나요(했나요)?','Which smart devices do (did) you use?'), options:DEVICE_TYPES, groups:['current','past'], showIf:(a)=>a.device_used==='예'||a.device_used==='Yes'},
+  {id:'device_satisfaction', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'scale', title:(a)=>L(a,'사용 중인(했던) 스마트 기기에 전반적으로 얼마나 만족하나요(했나요)?','Overall, how satisfied are (were) you with the smart device(s) you use(d)?'),
+    low:(a)=>L(a,'매우 불만족','Very dissatisfied'), high:(a)=>L(a,'매우 만족','Very satisfied'), groups:['current','past'], showIf:(a)=>a.device_used==='예'||a.device_used==='Yes'},
+  {id:'device_not_used_reason', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'multi', title:(a)=>L(a,'스마트 기기를 사용하지 않았다면, 그 이유는 무엇인가요?','If you didn\'t use a smart device, what was the reason?'), options:NOUSE_REASONS, groups:['past'], showIf:(a)=>a.device_used==='아니오'||a.device_used==='No'},
+  {id:'device_purchase_intent_past', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'scale', title:(a)=>L(a,'앞으로 다시 반려동물을 키운다면, 스마트 반려동물 기기를 구매할 의향이 있나요?','If you were to own a pet again in the future, would you be willing to buy a smart pet device?'),
+    low:(a)=>L(a,'전혀 없음','Not at all'), high:(a)=>L(a,'매우 있음','Very willing'), groups:['past']},
+  {id:'device_limit', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'multi', title:(a)=>L(a,'스마트기기·앱을 사용하면서(혹은 사용하지 않으면서) 느끼는 가장 큰 불편함이나 한계는?','What is the biggest frustration or limitation you feel about smart devices/apps (whether you use them or not)?'), options:LIMIT_REASONS, groups:['current']},
+
+  {id:'first_device_reason', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'multi', title:(a)=>L(a,'이런 스마트기기·앱을 사용하지 않을 것 같다면(또는 아직 안 써봤다면) 이유는 무엇인가요?','If you probably wouldn\'t use these smart devices/apps (or haven\'t tried them yet), what is the reason?'), options:NOUSE_REASONS, groups:['first']},
+  {id:'first_device_intent', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'scale', title:(a)=>L(a,'반려동물을 입양하게 된다면, 스마트 반려동물 기기를 구매할 의향이 있나요?','If you adopt a pet, would you be willing to buy a smart pet device?'),
+    low:(a)=>L(a,'전혀 없음','Not at all'), high:(a)=>L(a,'매우 있음','Very willing'), groups:['first']},
+
+  {id:'ai_interest', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'scale',
+    title:(a)=>L(a,'반려동물의 활동, 식사, 수분 섭취, 체중, 전반적 건강 상태를 스마트 기기와 연동해 맞춤형 인사이트와 추천을 제공하는 AI 기반 반려동물 케어 플랫폼에 얼마나 관심이 있나요?','How interested would you be in an AI-powered pet care platform that connects with smart devices to give personalized insights and recommendations based on your pet\'s activity, feeding, hydration, weight, and overall health?'),
+    low:(a)=>L(a,'전혀 관심 없음','Not interested at all'), high:(a)=>L(a,'매우 관심 있음','Extremely interested'), groups:'all'},
+  {id:'top_features', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'multi', title:(a)=>L(a,'다음 중 가장 가치 있다고 생각하는 기능은?','Which of the following features would be most valuable to you?'),
+    sub:(a)=>L(a,'최대 3개까지 선택해주세요.','Select up to 3.'), options:TOP_FEATURES, max:3, groups:'all'},
+
+  // ---- Section 5 : matching (all groups) ----
+  {id:'match_criteria', section:(a)=>L(a,'Section 5 · 반려동물 매칭','Section 5 · Pet Matching'), type:'multi', title:(a)=>L(a,'입양 대상을 고를 때 가장 중요하게 보는 기준은?','What criteria matter most to you when choosing a pet to adopt?'), options:FACTORS, groups:'all'},
+  {id:'match_interest', section:(a)=>L(a,'Section 5 · 반려동물 매칭','Section 5 · Pet Matching'), type:'scale', title:(a)=>L(a,'내 라이프스타일에 맞는 반려동물을 추천해주는 서비스가 있다면 얼마나 사용해보고 싶은가요?','If there were a service that recommends pets suited to your lifestyle, how likely would you be to try it?'),
+    low:(a)=>L(a,'전혀 아니다','Not at all likely'), high:(a)=>L(a,'매우 그렇다','Very likely'), groups:'all'},
+  {id:'match_inputs', section:(a)=>L(a,'Section 5 · 반려동물 매칭','Section 5 · Pet Matching'), type:'multi', title:(a)=>L(a,'그런 매칭 서비스에서 어떤 정보를 입력해서 추천받고 싶은가요?','What information would you want to provide to such a matching service to get recommendations?'), options:MATCH_INPUTS, groups:'all'},
+
+  // ---- Section 6 : pricing (all groups) ----
+  {id:'price_device', section:(a)=>L(a,'Section 6 · 가격','Section 6 · Pricing'), type:'single', title:(a)=>L(a,'스마트 반려동물 기기에 얼마까지 지불할 의향이 있나요?','How much would you be willing to pay for a smart pet device?'),
+    options:(a)=> isEN(a) ? ['Less than CAD $50','CAD $50–99','CAD $100–149','CAD $150–199','CAD $200–299','CAD $300 or more'] : ['5만원 미만','5만~9만원대','10만~14만원대','15만~19만원대','20만~29만원대','30만원 이상'],
+    groups:'all'},
+  {id:'price_subscription', section:(a)=>L(a,'Section 6 · 가격','Section 6 · Pricing'), type:'single', title:(a)=>L(a,'고급 AI 인사이트가 월 구독을 필요로 한다면, 얼마까지 지불할 의향이 있나요?','If advanced AI insights required a monthly subscription, how much would you be willing to pay?'),
+    options:(a)=> isEN(a) ? ['I would not subscribe','Less than CAD $5/month','CAD $5–9.99/month','CAD $10–14.99/month','CAD $15–19.99/month','CAD $20 or more/month'] : ['구독하지 않을 것 같음','월 5,000원 미만','월 5,000~9,900원','월 10,000~14,900원','월 15,000~19,900원','월 20,000원 이상'],
+    groups:'all'},
+  {id:'price_model', section:(a)=>L(a,'Section 6 · 가격','Section 6 · Pricing'), type:'single', title:(a)=>L(a,'어떤 가격 모델을 선호하나요?','Which pricing model would you prefer?'),
+    options:(a)=> LA(a, ['모든 기능 포함 일시불 구매','낮은 기기 가격 + 월 구독','일시불 구매 + 선택적 프리미엄 구독','무료 기본 앱 + 유료 프리미엄 기능','잘 모르겠음'], ['One-time purchase with all features included','Lower device price + monthly subscription','One-time purchase + optional premium subscription','Free basic app + paid premium features','Not sure']), groups:'all'},
+  {id:'price_willing', section:(a)=>L(a,'Section 6 · 가격','Section 6 · Pricing'), type:'multi', title:(a)=>L(a,'이 제품에 대한 지불 의향을 높이는 요인은 무엇인가요?','What would make you more willing to pay for this product?'),
+    sub:(a)=>L(a,'최대 3개까지 선택해주세요.','Select up to 3.'),
+    options:(a)=> LA(a, ['더 정확한 AI 추천','신뢰할 수 있는 건강 알림','맞춤형 인사이트','이미 보유한 기기와 연동','수의사 검증 기반 추천','무료 체험','낮은 기기 가격','낮은 구독료','더 나은 개인정보 보호','기타'], ['More accurate AI recommendations','Reliable health alerts','Personalized insights','Works with devices I already own','Veterinarian-supported recommendations','Free trial','Lower device price','Lower subscription fee','Better privacy protection','Other']),
+    max:3, groups:'all'},
+];
+
+/* ============ ENGINE ============ */
+const answers = {};
+let path = []; // resolved step objects in visit order
+let cursor = 0;
+let phase = 'lang'; // 'lang' -> 'onboarding' -> 'survey'
+let greetingTimer = null;
+
+const GREETINGS = ['안녕하세요','Hello'];
+
+function renderLangSelect(){
+  const main = document.getElementById('main');
+  main.innerHTML = `
+    <div class="lang-screen">
+      <div class="greeting" id="greetingText">${GREETINGS[0]}</div>
+      <div class="lang-select-label">언어를 선택하세요 · Select your language</div>
+      <div class="lang-buttons">
+        <button class="lang-btn" data-lang="한국어 (KOR)">한국어</button>
+        <button class="lang-btn" data-lang="English (CAD)">English</button>
+      </div>
+    </div>`;
+  let footer = document.querySelector('footer.nav');
+  if(footer) footer.remove();
+
+  let gi = 0;
+  clearInterval(greetingTimer);
+  greetingTimer = setInterval(()=>{
+    const el = document.getElementById('greetingText');
+    if(!el){ clearInterval(greetingTimer); return; }
+    el.style.opacity = 0;
+    setTimeout(()=>{
+      gi = (gi + 1) % GREETINGS.length;
+      el.textContent = GREETINGS[gi];
+      el.style.opacity = 1;
+    }, 400);
+  }, 1600);
+
+  document.querySelectorAll('.lang-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      clearInterval(greetingTimer);
+      answers.country = btn.dataset.lang;
+      phase = 'onboarding';
+      render();
+    });
+  });
+}
+
+function renderOnboarding(){
+  const isEn = answers.country === 'English (CAD)';
+  const main = document.getElementById('main');
+  main.innerHTML = isEn ? `
+    <div class="section-tag">About this survey</div>
+    <h1 class="q-title">Before you begin</h1>
+    <p class="q-sub" style="margin-bottom:20px;">
+      We're Cash Cow, a team participating in the IEB 2026 program (SKKU–UofT International Entrepreneurship Bootcamp). We're planning a pet care service, and this survey is conducted to understand how people care for pets, their experience with adoption, and what they expect from a pet care app.
+    </p>
+    <div class="info-block">
+      <div class="info-item"><b>Time required</b><span>Approximately 5–7 minutes.</span></div>
+      <div class="info-item"><b>Data use</b><span>Responses are used only for this team's service planning and program deliverables (IEB 2026), and are not shared outside the team or used for any other purpose.</span></div>
+    </div>
+  ` : `
+    <div class="section-tag">설문에 대하여</div>
+    <h1 class="q-title">설문을 시작하기 전에</h1>
+    <p class="q-sub" style="margin-bottom:20px;">
+      저희는 IEB 2026 프로그램(성균관대-토론토대 국제 창업 부트캠프) 참가팀 Cash Cow입니다. 반려동물 케어 서비스를 기획하고 있으며, 반려동물을 돌보는 방식과 입양 경험, 관리 앱에 대한 기대를 파악하고자 본 설문을 진행합니다.
+    </p>
+    <div class="info-block">
+      <div class="info-item"><b>소요 시간</b><span>약 5~7분이 소요됩니다.</span></div>
+      <div class="info-item"><b>데이터 사용</b><span>수집된 응답은 본 팀의 서비스 기획 및 IEB 2026 프로그램 산출물 제작 목적으로만 사용되며, 팀 외부에는 공유되지 않습니다.</span></div>
+    </div>
+  `;
+  let footer = document.querySelector('footer.nav');
+  if(footer) footer.remove();
+  footer = document.createElement('footer');
+  footer.className = 'nav';
+  const fwdBtn = document.createElement('button');
+  fwdBtn.className = 'nav-btn forward';
+  fwdBtn.textContent = isEn ? 'Start the survey' : '설문 시작하기';
+  fwdBtn.addEventListener('click', ()=>{ phase = 'survey'; render(); });
+  footer.appendChild(fwdBtn);
+  document.querySelector('.shell').appendChild(footer);
+}
+
+
+function currentGroup(){
+  if(answers.route_current === '예, 키우고 있어요') return 'current';
+  if(answers.route_past === '예, 키운 적 있어요') return 'past';
+  if(answers.route_past === '아니오, 키운 적 없어요') return 'first';
+  return null;
+}
+
+function stepApplies(s){
+  const g = answers.__group;
+  if(s.groups !== 'all' && (!g || !s.groups.includes(g))) return false;
+  if(s.showIf && !s.showIf(answers)) return false;
+  return true;
+}
+
+const SECTION_DIVIDERS = {
+  1: {kr:'다음은 응답자 기본 정보에 대한 질문입니다.', en:'The following questions are about your basic information.'},
+  2: {kr:'다음은 반려동물을 키우고 있는지에 대한 질문입니다.', en:'The following questions are about your current pet ownership status.'},
+  3: {kr:'다음은 반려동물 입양 경험에 대한 질문입니다.', en:'The following questions are about your pet adoption experience.'},
+  5: {kr:'다음은 반려동물 매칭 서비스에 대한 질문입니다.', en:'The following questions are about pet matching services.'},
+  6: {kr:'다음은 가격에 대한 질문입니다.', en:'The following questions are about pricing.'}
+};
+
+function sectionNum(sectionLabel){
+  const m = /Section\s*(\d+)/.exec(sectionLabel);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+function buildPath(){
+  // walk steps in order, filtering; group gets resolved as soon as routing answers exist
+  answers.__group = currentGroup();
+  const filtered = steps.filter(stepApplies);
+  const withDividers = [];
+  let prevNum = null;
+  filtered.forEach(s=>{
+    const label = typeof s.section === 'function' ? s.section(answers) : s.section;
+    const num = sectionNum(label);
+    if(num !== prevNum && SECTION_DIVIDERS[num]){
+      withDividers.push({type:'divider', section:s.section, dividerText:SECTION_DIVIDERS[num]});
+    }
+    withDividers.push(s);
+    prevNum = num;
+  });
+  path = withDividers;
+}
+
+function questionNumber(uptoIdx){
+  let n = 0;
+  for(let i=0; i<=uptoIdx; i++){
+    if(!['info','divider'].includes(path[i].type)) n++;
+  }
+  return n;
+}
+
+function render(){
+  if(phase === 'lang'){ document.getElementById('progressBar').style.display='none'; renderLangSelect(); return; }
+  if(phase === 'onboarding'){ document.getElementById('progressBar').style.display='none'; renderOnboarding(); return; }
+  document.getElementById('progressBar').style.display='flex';
+  buildPath();
+  if(cursor >= path.length){ renderDone(); return; }
+  const s = path[cursor];
+  const main = document.getElementById('main');
+  const title = typeof s.title === 'function' ? s.title(answers) : s.title;
+  const opts = typeof s.options === 'function' ? s.options(answers) : s.options;
+  const sectionLabel = typeof s.section === 'function' ? s.section(answers) : s.section;
+  const subText = typeof s.sub === 'function' ? s.sub(answers) : s.sub;
+
+  const isQuestion = !['info','divider'].includes(s.type);
+  const displayTitle = s.type === 'divider'
+    ? (isEN(answers) ? s.dividerText.en : s.dividerText.kr)
+    : title;
+  const numPrefix = isQuestion ? `${questionNumber(cursor)}. ` : '';
+
+  let html = `<div class="section-tag">${sectionLabel}</div><h1 class="q-title">${numPrefix}${displayTitle}</h1>`;
+  if(s.type !== 'divider' && subText) html += `<p class="q-sub">${subText}</p>`;
+
+  if(s.type === 'info'){
+    html += `<div class="info-block">`;
+    const body = typeof s.body === 'function' ? s.body(answers) : s.body;
+    body.forEach(([k,v])=>{ html += `<div class="info-item"><b>${k}</b><span>${v}</span></div>`; });
+    html += `</div>`;
+  } else if(s.type === 'single'){
+    html += `<div class="options">` + opts.map(o=>{
+      const sel = answers[s.id] === o ? 'selected' : '';
+      return `<div class="opt ${sel}" data-val="${escapeAttr(o)}"><span class="mark"></span>${o}</div>`;
+    }).join('') + `</div>`;
+    if(opts.some(isOtherVal) && isOtherVal(answers[s.id])){
+      html += `<input type="text" id="otherInput" class="other-input" placeholder="${L(answers, '직접 입력해주세요', 'Please specify')}" value="${escapeAttr(answers[s.id+'_other']||'')}" style="margin-top:12px;">`;
+    }
+  } else if(s.type === 'multi'){
+    const cur = answers[s.id] || [];
+    html += `<div class="options">` + opts.map(o=>{
+      const sel = cur.includes(o) ? 'selected' : '';
+      return `<div class="opt multi ${sel}" data-val="${escapeAttr(o)}"><span class="mark"></span>${o}</div>`;
+    }).join('') + `</div>`;
+    if(s.max) html += `<p class="hint">${L(answers, `최대 ${s.max}개 선택`, `Select up to ${s.max}`)}</p>`;
+    if(opts.some(isOtherVal) && cur.some(isOtherVal)){
+      html += `<input type="text" id="otherInput" class="other-input" placeholder="${L(answers, '직접 입력해주세요', 'Please specify')}" value="${escapeAttr(answers[s.id+'_other']||'')}" style="margin-top:12px;">`;
+    }
+  } else if(s.type === 'countByType'){
+    const types = answers.pet_type || [];
+    const cur = answers[s.id] || {};
+    html += `<div class="options">` + types.map(t=>{
+      const v = cur[t] !== undefined ? cur[t] : '';
+      return `<div class="opt" style="cursor:default;justify-content:space-between;">
+        <span>${t}</span>
+        <input type="number" min="0" class="other-input count-inp" data-type="${escapeAttr(t)}" style="margin:0;width:90px;" value="${escapeAttr(v)}" placeholder="${L(answers, '마리 수', 'count')}">
+      </div>`;
+    }).join('') + `</div>`;
+  } else if(s.type === 'text'){
+    const val = answers[s.id] || '';
+    html += s.textarea
+      ? `<textarea id="inp">${escapeHtml(val)}</textarea>`
+      : `<input type="text" id="inp" value="${escapeAttr(val)}">`;
+    if(s.optional) html += `<p class="hint">${L(answers, '선택 응답 (비워두고 넘어가도 됩니다)', 'Optional (you can leave this blank)')}</p>`;
+  } else if(s.type === 'number'){
+    const val = answers[s.id] || '';
+    html += `<input type="number" id="inp" value="${escapeAttr(val)}">`;
+  } else if(s.type === 'scale'){
+    const cur = answers[s.id];
+    html += `<div class="scale-row">` + [1,2,3,4,5].map(n=>{
+      const sel = cur === n ? 'selected' : '';
+      return `<button type="button" class="scale-btn ${sel}" data-val="${n}">${n}</button>`;
+    }).join('') + `</div>`;
+    const lowText = typeof s.low === 'function' ? s.low(answers) : s.low;
+    const highText = typeof s.high === 'function' ? s.high(answers) : s.high;
+    html += `<div class="scale-labels"><span>${lowText}</span><span>${highText}</span></div>`;
+  }
+
+  html += `<div id="errBox"></div>`;
+  main.innerHTML = html;
+
+  attachHandlers(s);
+  renderFooter(s);
+  updateProgress();
+}
+
+function attachHandlers(s){
+  if(s.type === 'single'){
+    document.querySelectorAll('.opt').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        answers[s.id] = el.dataset.val;
+        if(isOtherVal(el.dataset.val)){ render(); }
+        else{ goNext(); }
+      });
+    });
+  } else if(s.type === 'multi'){
+    document.querySelectorAll('.opt').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const cur = answers[s.id] || [];
+        const v = el.dataset.val;
+        const idx = cur.indexOf(v);
+        if(idx >= 0){ cur.splice(idx,1); }
+        else{
+          if(s.max && cur.length >= s.max){ return; }
+          cur.push(v);
+        }
+        answers[s.id] = cur;
+        render();
+      });
+    });
+  } else if(s.type === 'scale'){
+    document.querySelectorAll('.scale-btn').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        answers[s.id] = parseInt(el.dataset.val, 10);
+        goNext();
+      });
+    });
+  }
+}
+
+function renderFooter(s){
+  let footer = document.querySelector('footer.nav');
+  if(footer) footer.remove();
+  footer = document.createElement('footer');
+  footer.className = 'nav';
+
+  const btnRow = document.createElement('div');
+  btnRow.style.display = 'flex';
+  btnRow.style.gap = '10px';
+
+  const backBtn = document.createElement('button');
+  backBtn.className = 'nav-btn back';
+  backBtn.textContent = L(answers, '이전', 'Back');
+  backBtn.disabled = cursor === 0;
+  backBtn.style.visibility = cursor === 0 ? 'hidden' : 'visible';
+  backBtn.addEventListener('click', goBack);
+
+  const fwdBtn = document.createElement('button');
+  fwdBtn.className = 'nav-btn forward';
+  fwdBtn.textContent = L(answers, '다음', 'Next');
+
+  if(s.type === 'scale'){
+    fwdBtn.style.display = 'none'; // auto-advance
+  } else if(s.type === 'single'){
+    const opts = typeof s.options === 'function' ? s.options(answers) : s.options;
+    const pendingOther = isOtherVal(answers[s.id]) && opts.some(isOtherVal);
+    fwdBtn.style.display = pendingOther ? 'inline-block' : 'none';
+  }
+  fwdBtn.addEventListener('click', ()=> tryAdvance(s));
+
+  btnRow.appendChild(backBtn);
+  btnRow.appendChild(fwdBtn);
+  footer.appendChild(btnRow);
+  document.querySelector('.shell').appendChild(footer);
+}
+
+function isOtherVal(v){ return v === '기타' || v === 'Other'; }
+
+function tryAdvance(s){
+  const opts = typeof s.options === 'function' ? s.options(answers) : s.options;
+  if(s.type === 'countByType'){
+    const inputs = document.querySelectorAll('.count-inp');
+    const result = {};
+    let missing = false;
+    inputs.forEach(el=>{
+      const v = el.value.trim();
+      if(v === ''){ missing = true; }
+      result[el.dataset.type] = v;
+    });
+    if(missing){ showError(L(answers, '모든 종류의 마리 수를 입력해주세요.', 'Please enter a count for every type.')); return; }
+    answers[s.id] = result;
+  } else if(s.type === 'text'){
+    const v = document.getElementById('inp').value.trim();
+    if(!s.optional && !v){ showError(L(answers, '이 항목은 필수 응답이에요.', 'This question is required.')); return; }
+    answers[s.id] = v;
+  } else if(s.type === 'number'){
+    const v = document.getElementById('inp').value.trim();
+    if(!v){ showError(L(answers, '숫자를 입력해주세요.', 'Please enter a number.')); return; }
+    answers[s.id] = v;
+  } else if(s.type === 'single'){
+    if(opts && opts.some(isOtherVal) && isOtherVal(answers[s.id])){
+      const v = document.getElementById('otherInput').value.trim();
+      if(!v){ showError(L(answers, '기타 내용을 입력해주세요.', 'Please specify.')); return; }
+      answers[s.id+'_other'] = v;
+    }
+  } else if(s.type === 'multi'){
+    if(!answers[s.id] || answers[s.id].length === 0){ showError(L(answers, '최소 1개 이상 선택해주세요.', 'Please select at least one option.')); return; }
+    if(opts && opts.some(isOtherVal) && answers[s.id].some(isOtherVal)){
+      const v = document.getElementById('otherInput').value.trim();
+      if(!v){ showError(L(answers, '기타 내용을 입력해주세요.', 'Please specify.')); return; }
+      answers[s.id+'_other'] = v;
+    }
+  }
+  goNext();
+}
+
+function showError(msg){
+  document.getElementById('errBox').innerHTML = `<p class="error-msg">${msg}</p>`;
+}
+
+function goNext(){ cursor++; render(); }
+function goBack(){ if(cursor>0){ cursor--; render(); } }
+
+function updateProgress(){
+  const pct = path.length ? Math.round((cursor / path.length) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = pct + '%';
+}
+
+function renderDone(){
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressLabel').textContent = '100%';
+  let footer = document.querySelector('footer.nav');
+  if(footer) footer.remove();
+  document.getElementById('main').innerHTML = `
+    <div class="done-screen">
+      <div class="icon">🐾</div>
+      <h1>${L(answers,'설문을 마쳤습니다.','You\'ve completed the survey.')}</h1>
+      <p>${L(answers,'응답해주셔서 감사합니다. 아래 버튼을 눌러 제출을 완료해주세요.','Thank you for your responses. Click the button below to submit.')}</p>
+      <div id="submitArea" style="margin-top:24px;">
+        <button class="nav-btn forward" id="submitBtn" style="width:100%;">${L(answers,'응답 제출하기','Submit responses')}</button>
+      </div>
+      <div id="errBox"></div>
+    </div>`;
+  document.getElementById('submitBtn').addEventListener('click', submitSurvey);
+}
+
+/* ============ FIXED SHEET SCHEMA ============ */
+// [sheetColumnName, internalAnswerKey] — every submission writes ALL of these columns,
+// in this exact order, filling '' for whatever the respondent's group skipped.
+const SHEET_COLUMNS = [
+  ['submitted_at', '__submitted_at'],
+  ['lang', '__lang'],
+  ['route_group', '__group'],
+
+  ['s1_name','name'], ['s1_age','age'],
+  ['s1_household','household'], ['s1_household_other','household_other'],
+  ['s1_housing','housing'], ['s1_housing_other','housing_other'],
+  ['s1_ownership','ownership'], ['s1_ownership_other','ownership_other'],
+
+  ['s2_route_current','route_current'], ['s2_route_past','route_past'],
+
+  ['s3_pet_type','pet_type'], ['s3_pet_type_other','pet_type_other'],
+  ['s3_pet_count','pet_count'],
+  ['s3_acquire','acquire'], ['s3_acquire_other','acquire_other'],
+  ['s3_factors','factors'], ['s3_factors_other','factors_other'],
+  ['s3_reason','reason'],
+  ['s3_process_satisfaction','process_satisfaction'],
+  ['s3_process_regret','process_regret'],
+  ['s3_care_hard','care_hard'],
+  ['s3_no_pet_reason','no_pet_reason'],
+  ['s3_first_reason','first_reason'],
+  ['s3_first_timing','first_timing'],
+  ['s3_first_hesitation','first_hesitation'], ['s3_first_hesitation_other','first_hesitation_other'],
+  ['s3_first_infosource','first_infosource'], ['s3_first_infosource_other','first_infosource_other'],
+  ['s3_first_trust','first_trust'],
+  ['s3_first_info_worry','first_info_worry'],
+  ['s3_first_worry','first_worry'],
+
+  ['s4_app_used','app_used'],
+  ['s4_app_which','app_which'],
+  ['s4_app_satisfaction','app_satisfaction'],
+  ['s4_app_good','app_good'],
+  ['s4_app_pain','app_pain'],
+  ['s4_app_expect','app_expect'],
+  ['s4_first_app_expect','first_app_expect'],
+  ['s4_device_used','device_used'],
+  ['s4_device_which','device_which'], ['s4_device_which_other','device_which_other'],
+  ['s4_device_satisfaction','device_satisfaction'],
+  ['s4_device_not_used_reason','device_not_used_reason'], ['s4_device_not_used_reason_other','device_not_used_reason_other'],
+  ['s4_device_purchase_intent_past','device_purchase_intent_past'],
+  ['s4_device_limit','device_limit'], ['s4_device_limit_other','device_limit_other'],
+  ['s4_first_device_reason','first_device_reason'], ['s4_first_device_reason_other','first_device_reason_other'],
+  ['s4_first_device_intent','first_device_intent'],
+  ['s4_ai_interest','ai_interest'],
+  ['s4_top_features','top_features'], ['s4_top_features_other','top_features_other'],
+
+  ['s5_match_criteria','match_criteria'], ['s5_match_criteria_other','match_criteria_other'],
+  ['s5_match_interest','match_interest'],
+  ['s5_match_inputs','match_inputs'], ['s5_match_inputs_other','match_inputs_other'],
+
+  ['s6_price_device','price_device'],
+  ['s6_price_subscription','price_subscription'],
+  ['s6_price_model','price_model'],
+  ['s6_price_willing','price_willing'], ['s6_price_willing_other','price_willing_other'],
+];
+
+function flattenValue(v){
+  if(v === undefined || v === null) return '';
+  if(Array.isArray(v)) return v.join(', ');
+  if(typeof v === 'object') return Object.entries(v).map(([t,n])=>`${t}: ${n}`).join(', ');
+  return v;
+}
+
+function buildFixedPayload(){
+  const out = {};
+  answers.__submitted_at = new Date().toISOString();
+  answers.__lang = isEN(answers) ? 'EN' : 'KO';
+  SHEET_COLUMNS.forEach(([col, key])=>{
+    out[col] = flattenValue(answers[key]);
+  });
+  return out;
+}
+
+async function submitSurvey(){
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = L(answers,'제출 중...','Submitting...');
+  const payload = buildFixedPayload();
+  try{
+    if(SUBMIT_URL.startsWith('PASTE_')){
+      throw new Error(L(answers,'SUBMIT_URL 미설정','SUBMIT_URL not set'));
+    }
+    await fetch(SUBMIT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(payload)
+    });
+    document.getElementById('main').innerHTML = `
+      <div class="done-screen">
+        <div class="icon">✅</div>
+        <h1>${L(answers,'제출 완료','Submitted')}</h1>
+        <p>${L(answers,'소중한 응답 감사합니다!','Thank you for your response!')}</p>
+      </div>`;
+  }catch(e){
+    document.getElementById('errBox').innerHTML = `<p class="error-msg">${L(answers,'제출 URL이 아직 설정되지 않았어요. 개발자에게 문의해주세요.','The submit URL hasn\'t been set up yet. Please contact the developer.')} (${e.message})</p>`;
+    btn.disabled = false;
+    btn.textContent = L(answers,'응답 제출하기','Submit responses');
+  }
+}
+
+function escapeHtml(str){ return String(str).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(str){ return escapeHtml(str); }
+
+render();
+</script>
+</body>
+</html>
