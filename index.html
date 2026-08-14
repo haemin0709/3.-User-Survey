@@ -372,8 +372,8 @@ const LIMIT_REASONS_KR = ["너무 비쌈","설정·사용이 어려움","데이�
 const LIMIT_REASONS_EN = ["Too expensive","Difficult to set up or use","Data isn't very useful","Devices don't integrate well","Too many separate apps","Recommendations are too generic","Accuracy/reliability issues","Privacy concerns","Maintenance is a hassle","Subscription fees are a burden","Don't use one (don't feel the need)","Satisfied, no major complaints","Other"];
 const LIMIT_REASONS = (a)=> LA(a, LIMIT_REASONS_KR, LIMIT_REASONS_EN);
 
-const TOP_FEATURES_KR = ["라이프스타일 기반 맞춤 반려동물·품종 매칭","활동·행동 모니터링","식사·수분 섭취 모니터링","체중 및 건강 트래킹","건강 관련 알림","AI 기반 맞춤형 케어 추천","여러 스마트기기를 하나의 앱에서 통합 관리","초보 반려인을 위한 가이드","반려동물 입양·매칭 지원","신뢰할 수 있는 반려동물 케어 정보·자료 제공","기타"];
-const TOP_FEATURES_EN = ["Personalized pet/breed matching based on lifestyle","Activity/behavior monitoring","Feeding/hydration monitoring","Weight and wellness tracking","Health-related alerts","AI-powered personalized care recommendations","Managing multiple smart devices in one app","Guidance for new pet owners","Pet adoption/matching support","Access to trusted pet care information","Other"];
+const TOP_FEATURES_KR = ["활동·행동 모니터링","식사·수분 섭취 모니터링","체중 및 건강 트래킹","건강 관련 알림","AI 기반 맞춤형 케어 추천","여러 스마트기기를 하나의 앱에서 통합 관리","초보 반려인을 위한 가이드","신뢰할 수 있는 반려동물 케어 정보·자료 제공","기타"];
+const TOP_FEATURES_EN = ["Activity/behavior monitoring","Feeding/hydration monitoring","Weight and wellness tracking","Health-related alerts","AI-powered personalized care recommendations","Managing multiple smart devices in one app","Guidance for new pet owners","Access to trusted pet care information","Other"];
 const TOP_FEATURES = (a)=> LA(a, TOP_FEATURES_KR, TOP_FEATURES_EN);
 
 const MATCH_INPUTS_KR = ["주거환경","활동량","예산","알레르기","가족 구성원","그루밍(털 관리 등)에 할애 가능한 시간","성격 선호","기타"];
@@ -401,13 +401,14 @@ const DEVICE_INFO = (a)=> LA(a, DEVICE_INFO_KR, DEVICE_INFO_EN);
 // groups: 'all' or array of ['current','past','first']
 // showIf: function(a) => bool
 const steps = [
-  {id:'name', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'text', title:(a)=>L(a,'이름을 알려주세요.','What is your name?'), groups:'all'},
+  {id:'nationality', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'국적을 알려주세요.','What is your nationality?'),
+    options:(a)=> LA(a, ['대한민국','캐나다','기타'], ['South Korea','Canada','Other']), groups:'all'},
   {id:'age', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'number', title:(a)=>L(a,'만 나이를 입력해주세요.','What is your age?'), groups:'all'},
   {id:'household', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 가구 형태를 가장 잘 설명하는 것은?','Which best describes your current household?'),
     options:(a)=> LA(a, ['1인 가구','부부/커플 (자녀 없음)','자녀가 있는 가족','한부모 가족','룸메이트/셰어하우스','다세대 가구 (조부모 포함 등)','기타'], ['Living alone','Couple/partners (no children)','Family with children','Single-parent family','Roommates/shared housing','Multi-generational household (incl. grandparents)','Other']),
     groups:'all'},
   {id:'housing', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 거주 형태는?','What type of home do you currently live in?'),
-    options:(a)=> isEN(a) ? ['Apartment/condominium','Townhouse','Detached house','Semi-detached house','Student residence','Other'] : ['아파트','오피스텔','빌라·연립주택','단독주택','원룸','기숙사','기타'],
+    options:(a)=> LA(a, ['아파트/오피스텔','주택','기타'], ['Condo/Apartment','House','Other']),
     groups:'all'},
   {id:'ownership', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 거주지 소유 형태는?','What is your housing ownership status?'),
     options:(a)=> LA(a, ['본인 소유','임차 (전세/월세)','부모님·가족 명의 주택에 거주 (무상)','기타'], ['I own it','I rent it','Living in a family member\'s home (no rent)','Other']),
@@ -437,9 +438,11 @@ const steps = [
   {id:'no_pet_reason', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'현재 반려동물이 없는 주된 이유는?','What is the main reason you don\'t currently have a pet?'), textarea:true, groups:['past']},
 
   // ---- Section 2-3 : first-time ----
-  {id:'first_reason', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양을 고려하게 된 계기는?','What made you start considering adopting a pet?'), textarea:true, groups:['first']},
-  {id:'first_timing', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'single', title:(a)=>L(a,'입양 예정 시기는?','When are you planning to adopt?'),
+  {id:'first_willingness', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'scale', title:(a)=>L(a,'반려동물을 입양하고 싶은 의향은 어느 정도인가요?','How willing are you to adopt a pet?'),
+    low:(a)=>L(a,'전혀 없음','Not at all willing'), high:(a)=>L(a,'매우 있음','Very willing'), groups:['first']},
+  {id:'first_timing', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'single', title:(a)=>L(a,'입양 희망 예정 시기는?','When are you hoping to adopt?'),
     options:(a)=> LA(a, ['가까운 시일 내','수개월 내','1년 이내','아직 미정이지만 입양 의사 있음'], ['In the near future','Within a few months','Within a year','Not decided yet, but I intend to']), groups:['first']},
+  {id:'first_reason', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양을 고려하게 된 계기는?','What made you start considering adopting a pet?'), textarea:true, groups:['first']},
   {id:'first_hesitation', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'multi', title:(a)=>L(a,'입양을 망설이게 하는 가장 큰 이유는?','What is the biggest reason making you hesitate to adopt?'),
     options:(a)=> LA(a, ['준비 부족 불안','비용','주거환경','시간','정보 부족','책임감 부담','기타'], ['Anxiety about not being ready','Cost','Housing situation','Time','Lack of information','Feeling of responsibility','Other']), groups:['first']},
   {id:'first_infosource', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'multi', title:(a)=>L(a,'입양 가능한 반려동물 정보(어떤 보호소·기관에 어떤 동물이 있는지)는 주로 어디서 찾아보나요?','Where do you usually look for information on adoptable pets (which shelters/organizations have which animals)?'),
@@ -451,48 +454,53 @@ const steps = [
   {id:'first_worry', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양 후 반려동물을 키우게 되면 가장 걱정되는 부분은?','What worries you most about caring for a pet after adopting?'), textarea:true, groups:['first']},
 
   // ---- Section 3 : device / app usage ----
-  {id:'device_intro', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'info',
+  {id:'device_intro', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'info',
     title:(a)=>L(a,'다음은 반려동물 관리 도구에 대한 질문입니다.','The following questions are about pet care tools.'),
     sub:(a)=>L(a,"여기서 '스마트 반려동물 기기'란 반려동물의 활동, 건강, 식습관 등을 자동으로 기록하고 관리를 도와주는 기기를 의미합니다. 예를 들면 아래와 같은 기기가 있습니다.","Here, 'smart pet devices' refers to devices that automatically track and help manage your pet's activity, health, and eating habits. Some examples:"),
     body:DEVICE_INFO, groups:'all'},
 
-  {id:'app_used', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'single',
+  {id:'app_used', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'single',
     title:(a)=> a.__group==='past' ? L(a,'그때 반려동물 관리를 위해 사용했던 앱이 있었나요?',"Did you use an app to manage your pet's care back then?") : L(a,'현재 반려동물 관리를 위해 사용 중인 앱이 있나요?',"Do you currently use an app to manage your pet's care?"),
     options:(a)=> LA(a, ['예','아니오'], ['Yes','No']), groups:['current','past']},
-  {id:'app_which', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'text', title:(a)=>L(a,'어떤 앱을 사용하나요(했나요)?','Which app do (did) you use?'), groups:['current','past'], showIf:(a)=>a.app_used==='예'||a.app_used==='Yes'},
-  {id:'app_satisfaction', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'scale', title:(a)=>L(a,'그 앱에 얼마나 만족하나요(했나요)?','How satisfied are (were) you with that app?'),
+  {id:'app_which', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'text', title:(a)=>L(a,'어떤 앱을 사용하나요(했나요)?','Which app do (did) you use?'), groups:['current','past'], showIf:(a)=>a.app_used==='예'||a.app_used==='Yes'},
+  {id:'app_satisfaction', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'scale', title:(a)=>L(a,'그 앱에 얼마나 만족하나요(했나요)?','How satisfied are (were) you with that app?'),
     low:(a)=>L(a,'매우 불만족','Very dissatisfied'), high:(a)=>L(a,'매우 만족','Very satisfied'), groups:['current','past'], showIf:(a)=>a.app_used==='예'||a.app_used==='Yes'},
-  {id:'app_good', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'text', title:(a)=>L(a,'그 앱에서 만족하는(했던) 부분은 무엇인가요?','What do (did) you like about that app?'), textarea:true, groups:['current','past'], showIf:(a)=>a.app_used==='예'||a.app_used==='Yes'},
-  {id:'app_pain', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'text', title:(a)=>L(a,'그 앱의 가장 큰 불편함은 무엇인가요?','What is (was) the biggest frustration with that app?'), textarea:true, groups:['current','past'], showIf:(a)=>a.app_used==='예'||a.app_used==='Yes'},
-  {id:'app_expect', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'text', title:(a)=>L(a,'만약 반려동물 관리 앱을 사용하게 된다면, 기대하거나 꼭 필요하다고 생각하는 기능은 무엇인가요?','If you were to use a pet care app, what features would you expect or consider essential?'), textarea:true, groups:['current','past'], showIf:(a)=>a.app_used==='아니오'||a.app_used==='No'},
-  {id:'first_app_expect', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'text', title:(a)=>L(a,'반려동물 관리 앱이 있다면 어떤 기능을 기대하거나 꼭 필요하다고 생각하나요?','What features would you expect or consider essential in a pet care app?'), textarea:true, groups:['first']},
+  {id:'app_good', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'text', title:(a)=>L(a,'그 앱에서 만족하는(했던) 부분은 무엇인가요?','What do (did) you like about that app?'), textarea:true, groups:['current','past'], showIf:(a)=>a.app_used==='예'||a.app_used==='Yes'},
+  {id:'app_pain', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'text', title:(a)=>L(a,'그 앱의 가장 큰 불편함은 무엇인가요?','What is (was) the biggest frustration with that app?'), textarea:true, groups:['current','past'], showIf:(a)=>a.app_used==='예'||a.app_used==='Yes'},
+  {id:'app_expect', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'text', title:(a)=>L(a,'만약 반려동물 관리 앱을 사용하게 된다면, 기대하거나 꼭 필요하다고 생각하는 기능은 무엇인가요?','If you were to use a pet care app, what features would you expect or consider essential?'), textarea:true, groups:['current','past'], showIf:(a)=>a.app_used==='아니오'||a.app_used==='No'},
+  {id:'first_app_expect', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'text', title:(a)=>L(a,'반려동물 관리 앱이 있다면 어떤 기능을 기대하거나 꼭 필요하다고 생각하나요?','What features would you expect or consider essential in a pet care app?'), textarea:true, groups:['first']},
 
-  {id:'device_used', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'single',
+  {id:'device_used', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'single',
     title:(a)=> a.__group==='past' ? L(a,'그때 스마트/연결형 기기를 사용했었나요?','Did you use any smart/connected devices back then?') : L(a,'현재 반려동물을 위해 스마트/연결형 기기를 사용하고 있나요?','Do you currently use any smart/connected devices for your pet?'),
     options:(a)=> LA(a, ['예','아니오'], ['Yes','No']), groups:['current','past']},
-  {id:'device_which', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'multi', title:(a)=>L(a,'어떤 스마트 기기를 사용하나요(했나요)?','Which smart devices do (did) you use?'), options:DEVICE_TYPES, groups:['current','past'], showIf:(a)=>a.device_used==='예'||a.device_used==='Yes'},
-  {id:'device_satisfaction', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'scale', title:(a)=>L(a,'사용 중인(했던) 스마트 기기에 전반적으로 얼마나 만족하나요(했나요)?','Overall, how satisfied are (were) you with the smart device(s) you use(d)?'),
+  {id:'device_which', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'multi', title:(a)=>L(a,'어떤 스마트 기기를 사용하나요(했나요)?','Which smart devices do (did) you use?'), options:DEVICE_TYPES, groups:['current','past'], showIf:(a)=>a.device_used==='예'||a.device_used==='Yes'},
+  {id:'device_satisfaction', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'scale', title:(a)=>L(a,'사용 중인(했던) 스마트 기기에 전반적으로 얼마나 만족하나요(했나요)?','Overall, how satisfied are (were) you with the smart device(s) you use(d)?'),
     low:(a)=>L(a,'매우 불만족','Very dissatisfied'), high:(a)=>L(a,'매우 만족','Very satisfied'), groups:['current','past'], showIf:(a)=>a.device_used==='예'||a.device_used==='Yes'},
-  {id:'device_not_used_reason', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'multi', title:(a)=>L(a,'스마트 기기를 사용하지 않았다면, 그 이유는 무엇인가요?','If you didn\'t use a smart device, what was the reason?'), options:NOUSE_REASONS, groups:['past'], showIf:(a)=>a.device_used==='아니오'||a.device_used==='No'},
-  {id:'device_purchase_intent_past', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'scale', title:(a)=>L(a,'앞으로 다시 반려동물을 키운다면, 스마트 반려동물 기기를 구매할 의향이 있나요?','If you were to own a pet again in the future, would you be willing to buy a smart pet device?'),
+  {id:'device_not_used_reason', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'multi', title:(a)=>L(a,'스마트 기기를 사용하지 않았다면, 그 이유는 무엇인가요?','If you didn\'t use a smart device, what was the reason?'), options:NOUSE_REASONS, groups:['past'], showIf:(a)=>a.device_used==='아니오'||a.device_used==='No'},
+  {id:'device_purchase_intent_past', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'scale', title:(a)=>L(a,'앞으로 다시 반려동물을 키운다면, 스마트 반려동물 기기를 구매할 의향이 있나요?','If you were to own a pet again in the future, would you be willing to buy a smart pet device?'),
     low:(a)=>L(a,'전혀 없음','Not at all'), high:(a)=>L(a,'매우 있음','Very willing'), groups:['past']},
-  {id:'device_limit', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'multi', title:(a)=>L(a,'스마트기기·앱을 사용하면서(혹은 사용하지 않으면서) 느끼는 가장 큰 불편함이나 한계는?','What is the biggest frustration or limitation you feel about smart devices/apps (whether you use them or not)?'), options:LIMIT_REASONS, groups:['current']},
+  {id:'device_limit', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'multi', title:(a)=>L(a,'스마트기기·앱을 사용하면서(혹은 사용하지 않으면서) 느끼는 가장 큰 불편함이나 한계는?','What is the biggest frustration or limitation you feel about smart devices/apps (whether you use them or not)?'), options:LIMIT_REASONS, groups:['current']},
 
-  {id:'first_device_reason', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'multi', title:(a)=>L(a,'이런 스마트기기·앱을 사용하지 않을 것 같다면(또는 아직 안 써봤다면) 이유는 무엇인가요?','If you probably wouldn\'t use these smart devices/apps (or haven\'t tried them yet), what is the reason?'), options:NOUSE_REASONS, groups:['first']},
-  {id:'first_device_intent', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'scale', title:(a)=>L(a,'반려동물을 입양하게 된다면, 스마트 반려동물 기기를 구매할 의향이 있나요?','If you adopt a pet, would you be willing to buy a smart pet device?'),
+  {id:'first_device_reason', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'multi', title:(a)=>L(a,'이런 스마트기기·앱을 사용하지 않을 것 같다면(또는 아직 안 써봤다면) 이유는 무엇인가요?','If you probably wouldn\'t use these smart devices/apps (or haven\'t tried them yet), what is the reason?'), options:NOUSE_REASONS, groups:['first']},
+  {id:'first_device_intent', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'scale', title:(a)=>L(a,'반려동물을 입양하게 된다면, 스마트 반려동물 기기를 구매할 의향이 있나요?','If you adopt a pet, would you be willing to buy a smart pet device?'),
     low:(a)=>L(a,'전혀 없음','Not at all'), high:(a)=>L(a,'매우 있음','Very willing'), groups:['first']},
 
-  {id:'ai_interest', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'scale',
+  {id:'ai_interest', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'scale',
     title:(a)=>L(a,'반려동물의 활동, 식사, 수분 섭취, 체중, 전반적 건강 상태를 스마트 기기와 연동해 맞춤형 인사이트와 추천을 제공하는 AI 기반 반려동물 케어 플랫폼에 얼마나 관심이 있나요?','How interested would you be in an AI-powered pet care platform that connects with smart devices to give personalized insights and recommendations based on your pet\'s activity, feeding, hydration, weight, and overall health?'),
     low:(a)=>L(a,'전혀 관심 없음','Not interested at all'), high:(a)=>L(a,'매우 관심 있음','Extremely interested'), groups:'all'},
-  {id:'top_features', section:(a)=>L(a,'Section 4 · 관리 도구 사용','Section 4 · Using Care Tools'), type:'multi', title:(a)=>L(a,'다음 중 가장 가치 있다고 생각하는 기능은?','Which of the following features would be most valuable to you?'),
-    sub:(a)=>L(a,'최대 3개까지 선택해주세요.','Select up to 3.'), options:TOP_FEATURES, max:3, groups:'all'},
+  {id:'top_features', section:(a)=>L(a,'Section 4 · 반려동물 관리 도구','Section 4 · Pet Care Tools'), type:'multi', title:(a)=>L(a,'다음 중 가장 가치 있다고 생각하는 기능은?','Which of the following features would be most valuable to you?'),
+    options:TOP_FEATURES, groups:'all'},
 
   // ---- Section 5 : matching (all groups) ----
-  {id:'match_criteria', section:(a)=>L(a,'Section 5 · 반려동물 매칭','Section 5 · Pet Matching'), type:'multi', title:(a)=>L(a,'입양 대상을 고를 때 가장 중요하게 보는 기준은?','What criteria matter most to you when choosing a pet to adopt?'), options:FACTORS, groups:'all'},
-  {id:'match_interest', section:(a)=>L(a,'Section 5 · 반려동물 매칭','Section 5 · Pet Matching'), type:'scale', title:(a)=>L(a,'내 라이프스타일에 맞는 반려동물을 추천해주는 서비스가 있다면 얼마나 사용해보고 싶은가요?','If there were a service that recommends pets suited to your lifestyle, how likely would you be to try it?'),
+  {id:'match_criteria', section:(a)=>L(a,'Section 5 · 나에게 맞는 반려동물 추천','Section 5 · Pet Recommendations For You'), type:'multi',
+    title:(a)=>L(a,"'나에게 잘 맞는 반려동물 추천 서비스'에서 고려해야 할 사항은 무엇이라고 생각하나요?","What do you think a 'pet recommendation service tailored to you' should take into account?"),
+    options:FACTORS, groups:'all'},
+  {id:'match_interest', section:(a)=>L(a,'Section 5 · 나에게 맞는 반려동물 추천','Section 5 · Pet Recommendations For You'), type:'scale',
+    title:(a)=>L(a,'내 라이프스타일에 맞는 반려동물을 추천해주는 서비스가 있다면 얼마나 사용해보고 싶은가요?','If there were a service that recommends pets suited to your lifestyle, how likely would you be to try it?'),
     low:(a)=>L(a,'전혀 아니다','Not at all likely'), high:(a)=>L(a,'매우 그렇다','Very likely'), groups:'all'},
-  {id:'match_inputs', section:(a)=>L(a,'Section 5 · 반려동물 매칭','Section 5 · Pet Matching'), type:'multi', title:(a)=>L(a,'그런 매칭 서비스에서 어떤 정보를 입력해서 추천받고 싶은가요?','What information would you want to provide to such a matching service to get recommendations?'), options:MATCH_INPUTS, groups:'all'},
+  {id:'match_inputs', section:(a)=>L(a,'Section 5 · 나에게 맞는 반려동물 추천','Section 5 · Pet Recommendations For You'), type:'multi',
+    title:(a)=>L(a,'나에게 맞는 반려동물을 추천받기 위해 어떤 정보를 입력하고 싶은가요?','What information would you want to provide to get a pet recommendation tailored to you?'),
+    options:MATCH_INPUTS, groups:'all'},
 
   // ---- Section 6 : pricing (all groups) ----
   {id:'price_device', section:(a)=>L(a,'Section 6 · 가격','Section 6 · Pricing'), type:'single', title:(a)=>L(a,'스마트 반려동물 기기에 얼마까지 지불할 의향이 있나요?','How much would you be willing to pay for a smart pet device?'),
@@ -503,7 +511,7 @@ const steps = [
     groups:'all'},
   {id:'price_model', section:(a)=>L(a,'Section 6 · 가격','Section 6 · Pricing'), type:'single', title:(a)=>L(a,'어떤 가격 모델을 선호하나요?','Which pricing model would you prefer?'),
     options:(a)=> LA(a, ['모든 기능 포함 일시불 구매','낮은 기기 가격 + 월 구독','일시불 구매 + 선택적 프리미엄 구독','무료 기본 앱 + 유료 프리미엄 기능','잘 모르겠음'], ['One-time purchase with all features included','Lower device price + monthly subscription','One-time purchase + optional premium subscription','Free basic app + paid premium features','Not sure']), groups:'all'},
-  {id:'price_willing', section:(a)=>L(a,'Section 6 · 가격','Section 6 · Pricing'), type:'multi', title:(a)=>L(a,'이 제품에 대한 지불 의향을 높이는 요인은 무엇인가요?','What would make you more willing to pay for this product?'),
+  {id:'price_willing', section:(a)=>L(a,'Section 6 · 가격','Section 6 · Pricing'), type:'multi', title:(a)=>L(a,'이 서비스를 이용한다면 어떤 요소가 지불 의향을 높일 것 같나요?','If you were to use this service, what would make you more willing to pay for it?'),
     sub:(a)=>L(a,'최대 3개까지 선택해주세요.','Select up to 3.'),
     options:(a)=> LA(a, ['더 정확한 AI 추천','신뢰할 수 있는 건강 알림','맞춤형 인사이트','이미 보유한 기기와 연동','수의사 검증 기반 추천','무료 체험','낮은 기기 가격','낮은 구독료','더 나은 개인정보 보호','기타'], ['More accurate AI recommendations','Reliable health alerts','Personalized insights','Works with devices I already own','Veterinarian-supported recommendations','Free trial','Lower device price','Lower subscription fee','Better privacy protection','Other']),
     max:3, groups:'all'},
@@ -610,7 +618,7 @@ const SECTION_DIVIDERS = {
   1: {kr:'다음은 응답자 기본 정보에 대한 질문입니다.', en:'The following questions are about your basic information.'},
   2: {kr:'다음은 반려동물을 키우고 있는지에 대한 질문입니다.', en:'The following questions are about your current pet ownership status.'},
   3: {kr:'다음은 반려동물 입양 경험에 대한 질문입니다.', en:'The following questions are about your pet adoption experience.'},
-  5: {kr:'다음은 반려동물 매칭 서비스에 대한 질문입니다.', en:'The following questions are about pet matching services.'},
+  5: {kr:'다음은 나에게 맞는 반려동물 추천에 대한 질문입니다.', en:'The following questions are about getting pet recommendations tailored to you.'},
   6: {kr:'다음은 가격에 대한 질문입니다.', en:'The following questions are about pricing.'}
 };
 
@@ -687,6 +695,7 @@ function render(){
       return `<div class="opt multi ${sel}" data-val="${escapeAttr(o)}"><span class="mark"></span>${o}</div>`;
     }).join('') + `</div>`;
     if(s.max) html += `<p class="hint">${L(answers, `최대 ${s.max}개 선택`, `Select up to ${s.max}`)}</p>`;
+    else html += `<p class="hint">${L(answers, '복수 선택 가능', 'You can select multiple options')}</p>`;
     if(opts.some(isOtherVal) && cur.some(isOtherVal)){
       html += `<input type="text" id="otherInput" class="other-input" placeholder="${L(answers, '직접 입력해주세요', 'Please specify')}" value="${escapeAttr(answers[s.id+'_other']||'')}" style="margin-top:12px;">`;
     }
@@ -877,7 +886,7 @@ const SHEET_COLUMNS = [
   ['lang', '__lang'],
   ['route_group', '__group'],
 
-  ['s1_name','name'], ['s1_age','age'],
+  ['s1_nationality','nationality'], ['s1_age','age'],
   ['s1_household','household'], ['s1_household_other','household_other'],
   ['s1_housing','housing'], ['s1_housing_other','housing_other'],
   ['s1_ownership','ownership'], ['s1_ownership_other','ownership_other'],
@@ -893,8 +902,9 @@ const SHEET_COLUMNS = [
   ['s3_process_regret','process_regret'],
   ['s3_care_hard','care_hard'],
   ['s3_no_pet_reason','no_pet_reason'],
-  ['s3_first_reason','first_reason'],
+  ['s3_first_willingness','first_willingness'],
   ['s3_first_timing','first_timing'],
+  ['s3_first_reason','first_reason'],
   ['s3_first_hesitation','first_hesitation'], ['s3_first_hesitation_other','first_hesitation_other'],
   ['s3_first_infosource','first_infosource'], ['s3_first_infosource_other','first_infosource_other'],
   ['s3_first_trust','first_trust'],
