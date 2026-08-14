@@ -352,8 +352,8 @@ function L(a, kr, en){ return isEN(a) ? en : kr; }
 function LA(a, krArr, enArr){ return isEN(a) ? enArr : krArr; }
 
 /* ============ SHARED OPTION SETS ============ */
-const FACTORS_KR = ["성격","품종","크기","활동량·에너지 레벨","털 관리 난이도","알레르기 여부","훈련 난이도","주거 형태와의 적합성","예산(초기 비용+월 유지비)","가족 구성원과의 적합성(아이/노인/기존 반려동물 등)","본인이 직접 고려하지 않음 (가족 등 다른 사람이 결정)","기타"];
-const FACTORS_EN = ["Personality","Breed","Size","Activity/energy level","Grooming difficulty","Allergies","Trainability","Fit with housing type","Budget (initial cost + monthly upkeep)","Fit with family members (children, elderly, existing pets, etc.)","I wasn't the one who considered this (a family member or someone else decided)","Other"];
+const FACTORS_KR = ["성격","품종·외모","크기","활동량·에너지 레벨","털 관리 난이도","알레르기 여부","훈련 난이도","주거 형태와의 적합성","예산(초기 비용+월 유지비)","가족 구성원과의 적합성(아이/노인/기존 반려동물 등)","본인이 직접 고려하지 않음 (가족 등 다른 사람이 결정)","기타"];
+const FACTORS_EN = ["Personality","Breed/Appearance","Size","Activity/energy level","Grooming difficulty","Allergies","Trainability","Fit with housing type","Budget (initial cost + monthly upkeep)","Fit with family members (children, elderly, existing pets, etc.)","I wasn't the one who considered this (a family member or someone else decided)","Other"];
 const FACTORS = (a)=> LA(a, FACTORS_KR, FACTORS_EN);
 const MATCH_CRITERIA_KR = ["주거 형태","활동량·라이프스타일","반려동물을 혼자 두는 시간","예산","반려동물 케어 경험 수준","가족 구성원","돌봄에 투자 가능한 시간","선호하는 반려동물 성격","선호하는 크기","기타"];
 const MATCH_CRITERIA_EN = ["Housing type","Activity level/lifestyle","Time pet would spend alone","Budget","Pet care experience level","Family members","Time available for care","Preferred pet personality","Preferred size","Other"];
@@ -583,9 +583,9 @@ function renderOnboarding(){
 
 
 function currentGroup(){
-  if(answers.route_current === '예, 키우고 있어요') return 'current';
-  if(answers.route_past === '예, 키운 적 있어요') return 'past';
-  if(answers.route_past === '아니오, 키운 적 없어요') return 'first';
+  if(answers.route_current === '예, 키우고 있어요' || answers.route_current === 'Yes, I currently own a pet') return 'current';
+  if(answers.route_past === '예, 키운 적 있어요' || answers.route_past === 'Yes, I have before') return 'past';
+  if(answers.route_past === '아니오, 키운 적 없어요' || answers.route_past === 'No, never') return 'first';
   return null;
 }
 
