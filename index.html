@@ -404,13 +404,14 @@ const steps = [
   {id:'nationality', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'국적을 알려주세요.','What is your nationality?'),
     options:(a)=> LA(a, ['대한민국','캐나다','기타'], ['South Korea','Canada','Other']), groups:'all'},
   {id:'age', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'number', title:(a)=>L(a,'만 나이를 입력해주세요.','What is your age?'), groups:'all'},
-  {id:'household', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 귀하와 함께 거주하는 사람을 모두 선택해 주세요.','Please select everyone you currently live with.'),
-    options:(a)=> LA(a, ['1인 가구','부부/커플 (자녀 없음)','자녀가 있는 가족','한부모 가족','룸메이트/셰어하우스','다세대 가구 (조부모 포함 등)','기타'], ['Living alone','Couple/partners (no children)','Family with children','Single-parent family','Roommates/shared housing','Multi-generational household (incl. grandparents)','Other']),
+  {id:'household', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'multi', title:(a)=>L(a,'현재 귀하와 함께 거주하는 사람을 모두 선택해 주세요.','Please select everyone you currently live with.'),
+    sub:(a)=>L(a,'본인을 제외하고 선택해 주세요.','Please select excluding yourself.'),
+    options:(a)=> LA(a, ['혼자 거주함','배우자 또는 파트너','자녀','부모 또는 배우자의 부모','형제·자매','조부모','기타 친척','친구 또는 룸메이트','기타 비가족 구성원','기타','응답하고 싶지 않음'], ['Living alone','Spouse or partner','Children','Parents or parents-in-law','Siblings','Grandparents','Other relatives','Friends or roommates','Other non-family members','Other','Prefer not to answer']),
     groups:'all'},
-  {id:'housing', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 거주 형태는?','What type of home do you currently live in?'),
+  {id:'housing', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 거주 형태는 무엇인가요?','What type of home do you currently live in?'),
     options:(a)=> LA(a, ['아파트/오피스텔','주택','기타'], ['Condo/Apartment','House','Other']),
     groups:'all'},
-  {id:'ownership', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 거주지 소유 형태는?','What is your housing ownership status?'),
+  {id:'ownership', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 거주지 소유 형태는 무엇인가요?','What is your housing ownership status?'),
     options:(a)=> LA(a, ['본인 소유','임차 (전세/월세)','부모님·가족 명의 주택에 거주 (무상)','기타'], ['I own it','I rent it','Living in a family member\'s home (no rent)','Other']),
     groups:'all'},
 
@@ -433,9 +434,9 @@ const steps = [
     low:(a)=>L(a,'매우 불만족','Very dissatisfied'), high:(a)=>L(a,'매우 만족','Very satisfied'), groups:['current','past']},
   {id:'process_regret', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양 과정에서 아쉬웠던 점이 있다면 무엇인가요?','Was there anything disappointing about the adoption process?'), textarea:true, groups:['current','past']},
   {id:'care_hard', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text',
-    title:(a)=> a.__group==='past' ? L(a,'해당 반려동물(들)을 키우면서 어려웠던 점이나 스트레스받았던 점은 무엇인가요?','What was the hardest or most stressful part of caring for that pet?') : L(a,'반려동물(들)을 관리하면서 가장 어렵거나 힘들고, 스트레스받는 점은?','What is the hardest or most stressful part of caring for your pet?'),
+    title:(a)=> a.__group==='past' ? L(a,'해당 반려동물(들)을 키우면서 어려웠던 점이나 스트레스받았던 점은 무엇인가요?','What was the hardest or most stressful part of caring for that pet?') : L(a,'반려동물(들)을 관리하면서 가장 어렵거나 힘들고, 스트레스받는 점은 무엇인가요?','What is the hardest or most stressful part of caring for your pet?'),
     textarea:true, groups:['current','past']},
-  {id:'no_pet_reason', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'현재 반려동물이 없는 주된 이유는?','What is the main reason you don\'t currently have a pet?'), textarea:true, groups:['past']},
+  {id:'no_pet_reason', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'현재 반려동물이 없는 주된 이유는 무엇인가요?','What is the main reason you don\'t currently have a pet?'), textarea:true, groups:['past']},
 
   // ---- Section 2-3 : first-time ----
   {id:'first_willingness', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'scale', title:(a)=>L(a,'반려동물을 입양하고 싶은 의향은 어느 정도인가요?','How willing are you to adopt a pet?'),
@@ -443,15 +444,15 @@ const steps = [
   {id:'first_timing', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'single', title:(a)=>L(a,'입양 희망 예정 시기는 언제인가요?','When are you hoping to adopt?'),
     options:(a)=> LA(a, ['가까운 시일 내','수개월 내','1년 이내','아직 미정이지만 입양 의사 있음'], ['In the near future','Within a few months','Within a year','Not decided yet, but I intend to']), groups:['first']},
   {id:'first_reason', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양을 고려하게 된 계기는 무엇인가요?','What made you start considering adopting a pet?'), textarea:true, groups:['first']},
-  {id:'first_hesitation', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'multi', title:(a)=>L(a,'입양을 망설이게 하는 가장 큰 이유는?','What is the biggest reason making you hesitate to adopt?'),
+  {id:'first_hesitation', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'multi', title:(a)=>L(a,'입양을 망설이게 하는 가장 큰 이유는 무엇인가요?','What is the biggest reason making you hesitate to adopt?'),
     options:(a)=> LA(a, ['준비 부족 불안','비용','주거환경','시간','정보 부족','책임감 부담','기타'], ['Anxiety about not being ready','Cost','Housing situation','Time','Lack of information','Feeling of responsibility','Other']), groups:['first']},
   {id:'first_infosource', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'multi', title:(a)=>L(a,'입양 가능한 반려동물 정보는 주로 어디서 찾아보나요?','Where do you usually look for information on adoptable pets?'),
     options:(a)=> LA(a, ['보호소 웹사이트·앱','온라인 커뮤니티','SNS','지인','수의사','정부 공공API·사이트','기타'], ['Shelter websites/apps','Online communities','Social media','Friends or family','Veterinarian','Government public data/sites','Other']), groups:['first']},
   {id:'first_trust', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'scale', title:(a)=>L(a,'찾아본 입양 가능한 반려동물 정보를 얼마나 신뢰하나요?','Overall, how much do you trust the adoptable-pet information you find?'),
     low:(a)=>L(a,'전혀 신뢰 안 함','Not trustworthy at all'), high:(a)=>L(a,'매우 신뢰함','Very trustworthy'), groups:['first']},
-  {id:'first_info_worry', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양 가능한 반려동물 정보를 찾아볼 때 우려되거나 걱정되는 점은?','What concerns or worries you when looking for adoptable-pet information?'),
+  {id:'first_info_worry', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양 가능한 반려동물 정보를 찾아볼 때 우려되거나 걱정되는 점은 무엇인가요?','What concerns or worries you when looking for adoptable-pet information?'),
     sub:(a)=>L(a,'예: 정보가 최신이 아님, 사진과 실제가 다름, 성격 정보 부족 등','e.g., information isn\'t up to date, photos don\'t match reality, lack of personality details, etc.'), textarea:true, groups:['first']},
-  {id:'first_worry', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양 후 반려동물을 키우게 되면 가장 걱정되는 부분은?','What worries you most about caring for a pet after adopting?'), textarea:true, groups:['first']},
+  {id:'first_worry', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양 후 반려동물을 키우게 되면 가장 걱정되는 부분은 무엇인가요?','What worries you most about caring for a pet after adopting?'), textarea:true, groups:['first']},
 
   // ---- Section 3 : device / app usage ----
   {id:'device_intro', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'info',
@@ -479,7 +480,7 @@ const steps = [
   {id:'device_not_used_reason', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'multi', title:(a)=>L(a,'스마트 기기를 사용하지 않았다면, 그 이유는 무엇인가요?','If you didn\'t use a smart device, what was the reason?'), options:NOUSE_REASONS, groups:['past'], showIf:(a)=>a.device_used==='아니오'||a.device_used==='No'},
   {id:'device_purchase_intent_past', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'scale', title:(a)=>L(a,'앞으로 다시 반려동물을 키운다면, 스마트 반려동물 기기를 구매할 의향이 있나요?','If you were to own a pet again in the future, would you be willing to buy a smart pet device?'),
     low:(a)=>L(a,'전혀 없음','Not at all'), high:(a)=>L(a,'매우 있음','Very willing'), groups:['past']},
-  {id:'device_limit', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'multi', title:(a)=>L(a,'스마트기기·앱을 사용하면서 느끼는 가장 큰 불편함이나 한계는?','What is the biggest frustration or limitation you feel about smart devices/apps (whether you use them or not)?'), options:LIMIT_REASONS, groups:['current']},
+  {id:'device_limit', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'multi', title:(a)=>L(a,'스마트기기·앱을 사용하면서 느끼는 가장 큰 불편함이나 한계는 무엇인가요?','What is the biggest frustration or limitation you feel about smart devices/apps (whether you use them or not)?'), options:LIMIT_REASONS, groups:['current']},
 
   {id:'first_device_reason', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'multi', title:(a)=>L(a,'이런 스마트기기·앱을 사용하지 않을 것 같다면(또는 아직 안 써봤다면) 이유는 무엇인가요?','If you probably wouldn\'t use these smart devices/apps (or haven\'t tried them yet), what is the reason?'), options:NOUSE_REASONS, groups:['first']},
   {id:'first_device_intent', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'scale', title:(a)=>L(a,'반려동물을 입양하게 된다면, 스마트 반려동물 기기를 구매할 의향이 있나요?','If you adopt a pet, would you be willing to buy a smart pet device?'),
@@ -592,7 +593,7 @@ function renderOnboarding(){
     <div class="section-tag">설문에 대하여</div>
     <h1 class="q-title">설문을 시작하기 전에</h1>
     <p class="q-sub" style="margin-bottom:20px;">
-      저희는 IEB 2026 프로그램(성균관대-토론토대 국제 창업 부트캠프) 참가팀 Cash Cow입니다. 반려동물 입양과 케어를 지원하는 어플리케이션을 기획 중에 있으며, 이에 반려동물과 관련된 전반적인 사용자 경험을 파악하고자 본 설문을 진행하게 되었습니다.
+      저희는 IEB 2026 프로그램(성균관대-토론토대 국제 창업 부트캠프) 참가팀 Cash Cow입니다. 현재 반려동물 입양과 케어를 지원하는 어플리케이션을 기획 중에 있으며, 이에 반려동물과 관련된 전반적인 사용자 경험을 파악하고자 본 설문을 진행하게 되었습니다.
     </p>
     <div class="info-block">
       <div class="info-item"><b>소요 시간</b><span>약 5~7분이 소요됩니다.</span></div>
@@ -629,7 +630,7 @@ function stepApplies(s){
 const SECTION_DIVIDERS = {
   1: {kr:'다음은 응답자 기본 정보에 대한 질문입니다.', en:'The following questions are about your basic information.'},
   2: {kr:'다음은 반려동물 양육 경험에 대한 질문입니다.', en:'The following questions are about your current pet ownership status.'},
-  3: {kr:'다음은 반려동물 입양 경험에 대한 질문입니다.', en:'The following questions are about your pet adoption experience.'},
+  3: {kr:'다음은 반려동물 입양과 관련된 질문입니다.', en:'The following questions are about your pet adoption experience.'},
   5: {kr:'다음은 나에게 맞는 반려동물을 추천해주는 기능에 대한 질문입니다.', en:'The following questions are about a feature that recommends pets tailored to you.'},
   6: {kr:'다음은 반려동물 관련 서비스 지불 의향에 대한 질문입니다.', en:'The following questions are about your willingness to pay for pet-related services.'}
 };
