@@ -355,6 +355,9 @@ function LA(a, krArr, enArr){ return isEN(a) ? enArr : krArr; }
 const FACTORS_KR = ["성격","품종","크기","활동량·에너지 레벨","털 관리 난이도","알레르기 여부","훈련 난이도","주거 형태와의 적합성","예산(초기 비용+월 유지비)","가족 구성원과의 적합성(아이/노인/기존 반려동물 등)","본인이 직접 고려하지 않음 (가족 등 다른 사람이 결정)","기타"];
 const FACTORS_EN = ["Personality","Breed","Size","Activity/energy level","Grooming difficulty","Allergies","Trainability","Fit with housing type","Budget (initial cost + monthly upkeep)","Fit with family members (children, elderly, existing pets, etc.)","I wasn't the one who considered this (a family member or someone else decided)","Other"];
 const FACTORS = (a)=> LA(a, FACTORS_KR, FACTORS_EN);
+const MATCH_CRITERIA_KR = ["주거 형태","활동량·라이프스타일","반려동물을 혼자 두는 시간","예산","반려동물 케어 경험 수준","가족 구성원","돌봄에 투자 가능한 시간","선호하는 반려동물 성격","선호하는 크기","기타"];
+const MATCH_CRITERIA_EN = ["Housing type","Activity level/lifestyle","Time pet would spend alone","Budget","Pet care experience level","Family members","Time available for care","Preferred pet personality","Preferred size","Other"];
+const MATCH_CRITERIA = (a)=> LA(a, MATCH_CRITERIA_KR, MATCH_CRITERIA_EN);
 
 const ACQUIRE_KR = ["보호소","브리더","펫샵","지인","직접 구조","온라인 입양 플랫폼","기타"];
 const ACQUIRE_EN = ["Animal shelter","Breeder","Pet store","Friend or family","Rescued it myself","Online adoption platform","Other"];
@@ -447,7 +450,7 @@ const steps = [
   {id:'first_hesitation', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'multi', title:(a)=>L(a,'입양을 망설이게 하는 가장 큰 이유는 무엇인가요?','What is the biggest reason making you hesitate to adopt?'),
     options:(a)=> LA(a, ['준비 부족 불안','비용','주거환경','시간','정보 부족','책임감 부담','기타'], ['Anxiety about not being ready','Cost','Housing situation','Time','Lack of information','Feeling of responsibility','Other']), groups:['first']},
   {id:'first_infosource', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'multi', title:(a)=>L(a,'입양 가능한 반려동물 정보는 주로 어디서 찾아보나요?','Where do you usually look for information on adoptable pets?'),
-    options:(a)=> LA(a, ['보호소 웹사이트·앱','온라인 커뮤니티','SNS','지인','수의사','정부 공공API·사이트','기타'], ['Shelter websites/apps','Online communities','Social media','Friends or family','Veterinarian','Government public data/sites','Other']), groups:['first']},
+    options:(a)=> LA(a, ['보호소 웹사이트·앱','온라인 커뮤니티','SNS','지인','수의사','지자체·정부 동물보호 사이트','기타'], ['Shelter websites/apps','Online communities','Social media','Friends or family','Veterinarian','Government/municipal animal protection sites','Other']), groups:['first']},
   {id:'first_trust', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'scale', title:(a)=>L(a,'찾아본 입양 가능한 반려동물 정보를 얼마나 신뢰하나요?','Overall, how much do you trust the adoptable-pet information you find?'),
     low:(a)=>L(a,'전혀 신뢰 안 함','Not trustworthy at all'), high:(a)=>L(a,'매우 신뢰함','Very trustworthy'), groups:['first']},
   {id:'first_info_worry', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양 가능한 반려동물 정보를 찾아볼 때 우려되거나 걱정되는 점은 무엇인가요?','What concerns or worries you when looking for adoptable-pet information?'),
@@ -471,9 +474,9 @@ const steps = [
     low:(a)=>L(a,'전혀 없음','Not at all'), high:(a)=>L(a,'매우 있음','Very willing'), groups:['past']},
   {id:'device_limit', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'multi', title:(a)=>L(a,'스마트기기·앱을 사용하면서 느끼는 가장 큰 불편함이나 한계는 무엇인가요?','What is the biggest frustration or limitation you feel about smart devices/apps?'), options:LIMIT_REASONS, groups:['current']},
 
-  {id:'first_device_reason', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'multi', title:(a)=>L(a,'이런 스마트기기·앱을 사용하지 않을 것 같다면(또는 아직 안 써봤다면) 이유는 무엇인가요?','If you probably wouldn\'t use these smart devices/apps (or haven\'t tried them yet), what is the reason?'), options:NOUSE_REASONS, groups:['first']},
   {id:'first_device_intent', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'scale', title:(a)=>L(a,'반려동물을 입양하게 된다면, 스마트 반려동물 기기를 구매할 의향이 있나요?','If you adopt a pet, would you be willing to buy a smart pet device?'),
     low:(a)=>L(a,'전혀 없음','Not at all'), high:(a)=>L(a,'매우 있음','Very willing'), groups:['first']},
+  {id:'first_device_reason', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'multi', title:(a)=>L(a,'그렇게 답하신 주된 이유는 무엇인가요?','What is the main reason for your answer?'), options:NOUSE_REASONS, groups:['first'], showIf:(a)=>(a.first_device_intent||0)<=3},
 
   {id:'app_used', section:(a)=>L(a,'Section 4 · 스마트 반려동물 기기','Section 4 · Smart Pet Devices'), type:'single',
     title:(a)=> a.__group==='past' ? L(a,'그때 반려동물 관리를 위해 사용했던 앱이 있었나요?',"Did you use an app to manage your pet's care back then?") : L(a,'반려동물 관리를 위해 사용 중인 앱이 있나요?',"Do you use an app to manage your pet's care?"),
@@ -495,7 +498,7 @@ const steps = [
   // ---- Section 5 : matching (all groups) ----
   {id:'match_criteria', section:(a)=>L(a,'Section 5 · 나에게 맞는 반려동물 추천','Section 5 · Pet Recommendations For You'), type:'multi',
     title:(a)=>L(a,"'나에게 잘 맞는 반려동물 추천 기능'에서 고려해야 할 사항은 무엇이라고 생각하나요?","What do you think a 'pet recommendation feature tailored to you' should take into account?"),
-    options:FACTORS, groups:'all'},
+    options:MATCH_CRITERIA, groups:'all'},
   {id:'match_interest', section:(a)=>L(a,'Section 5 · 나에게 맞는 반려동물 추천','Section 5 · Pet Recommendations For You'), type:'scale',
     title:(a)=>L(a,'내 라이프스타일에 맞는 반려동물을 추천해주는 기능이 있다면 얼마나 사용해보고 싶은가요?','If there were a feature that recommends pets suited to your lifestyle, how likely would you be to try it?'),
     low:(a)=>L(a,'전혀 아니다','Not at all likely'), high:(a)=>L(a,'매우 그렇다','Very likely'), groups:'all'},
