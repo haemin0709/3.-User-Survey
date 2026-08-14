@@ -409,7 +409,7 @@ const steps = [
   {id:'age', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'number', title:(a)=>L(a,'만 나이를 입력해주세요.','What is your age?'), groups:'all'},
   {id:'household', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'multi', title:(a)=>L(a,'현재 귀하와 함께 거주하는 사람을 모두 선택해 주세요.','Please select everyone you currently live with.'),
     sub:(a)=>L(a,'본인을 제외하고 선택해 주세요.','Please select excluding yourself.'),
-    options:(a)=> LA(a, ['혼자 거주함','배우자 또는 파트너','자녀','부모 또는 배우자의 부모','형제·자매','조부모','기타 친척','친구 또는 룸메이트','기타 비가족 구성원','기타','응답하고 싶지 않음'], ['Living alone','Spouse or partner','Children','Parents or parents-in-law','Siblings','Grandparents','Other relatives','Friends or roommates','Other non-family members','Other','Prefer not to answer']),
+    options:(a)=> LA(a, ['혼자 거주함','배우자 또는 파트너','자녀','본인의 부모','배우자의 부모','형제·자매','조부모','친구 또는 룸메이트','기타'], ['Living alone','Spouse or partner','Children','My parents','Spouse\'s parents','Siblings','Grandparents','Friends or roommates','Other']),
     groups:'all'},
   {id:'housing', section:(a)=>L(a,'Section 1 · 기본 정보','Section 1 · Basic Information'), type:'single', title:(a)=>L(a,'현재 거주 형태는 무엇인가요?','What type of home do you currently live in?'),
     options:(a)=> LA(a, ['아파트/오피스텔','주택','기타'], ['Condo/Apartment','House','Other']),
