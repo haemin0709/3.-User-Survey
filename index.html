@@ -554,8 +554,7 @@ function renderOnboarding(){
   const isEn = answers.country === 'English (CAD)';
   const main = document.getElementById('main');
   main.innerHTML = isEn ? `
-    <div class="section-tag">About this survey</div>
-    <h1 class="q-title">Before you begin</h1>
+    <h1 class="q-title">About this survey</h1>
     <p class="q-sub" style="margin-bottom:20px;">
       We're Cash Cow, a team participating in the IEB 2026 program (SKKU–UofT International Entrepreneurship Bootcamp). We're planning a pet care application, and this survey is conducted to understand how people care for pets, their experience with adoption, and what they expect from a pet care app.
     </p>
@@ -564,8 +563,7 @@ function renderOnboarding(){
       <div class="info-item"><b>Data use</b><span>Responses are used only for this team's application planning and program deliverables (IEB 2026), and are not shared outside the team or used for any other purpose.</span></div>
     </div>
   ` : `
-    <div class="section-tag">설문에 대하여</div>
-    <h1 class="q-title">설문을 시작하기 전에</h1>
+    <h1 class="q-title">설문에 대하여</h1>
     <p class="q-sub" style="margin-bottom:20px;">
       저희는 IEB 2026 프로그램(성균관대-토론토대 국제 창업 부트캠프) 참가팀 Cash Cow입니다. 현재 반려동물 입양과 케어를 지원하는 어플리케이션을 기획 중에 있으며, 이에 반려동물과 관련된 전반적인 사용자 경험을 파악하고자 본 설문을 진행하게 되었습니다.
     </p>
@@ -602,7 +600,7 @@ function stepApplies(s){
 }
 
 const SECTION_DIVIDERS = {
-  1: {kr:'다음은 응답자 기본 정보에 대한 질문입니다.', en:'The following questions are about your basic information.'},
+  1: {kr:'다음은 응답자 정보에 대한 질문입니다.', en:'The following questions are about your basic information.'},
   2: {kr:'다음은 반려동물 양육 경험에 대한 질문입니다.', en:'The following questions are about your pet ownership experience.'},
   3: {kr:'다음은 반려동물 입양과 관련된 질문입니다.', en:'The following questions are about pet adoption.'},
   5: {kr:'다음은 나에게 맞는 반려동물을 추천해주는 기능에 대한 질문입니다.', en:'The following questions are about a feature that recommends pets tailored to you.'}
