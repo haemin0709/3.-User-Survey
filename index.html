@@ -437,9 +437,8 @@ const steps = [
     low:(a)=>L(a,'매우 불만족','Very dissatisfied'), high:(a)=>L(a,'매우 만족','Very satisfied'), groups:['current','past']},
   {id:'process_regret', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'입양 과정에서 아쉬웠던 점이 있다면 무엇인가요?','Was there anything disappointing about the adoption process?'), textarea:true, groups:['current','past']},
   {id:'care_hard', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text',
-    title:(a)=> a.__group==='past' ? L(a,'해당 반려동물(들)을 키우면서 어려웠던 점이나 스트레스받았던 점은 무엇인가요?','What was the hardest or most stressful part of caring for that pet?') : L(a,'반려동물(들)을 관리하면서 가장 어렵거나 힘들고, 스트레스받는 점은 무엇인가요?','What is the hardest or most stressful part of caring for your pet?'),
+    title:(a)=> a.__group==='past' ? L(a,'반려동물(들)을 키우면서 힘들었던 점이나 어려웠던 점은 무엇인가요?','What was the hardest or most difficult part of caring for that pet?') : L(a,'반려동물(들)을 키우면서 힘든 점이나 어려운 점은 무엇인가요?','What is the hardest or most difficult part of caring for your pet?'),
     textarea:true, groups:['current','past']},
-  {id:'no_pet_reason', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'text', title:(a)=>L(a,'현재 반려동물이 없는 주된 이유는 무엇인가요?','What is the main reason you don\'t currently have a pet?'), textarea:true, groups:['past']},
 
   // ---- Section 2-3 : first-time ----
   {id:'first_willingness', section:(a)=>L(a,'Section 3 · 반려동물 입양 경험','Section 3 · Pet Adoption Experience'), type:'scale', title:(a)=>L(a,'반려동물을 입양하고 싶은 의향은 어느 정도인가요?','How willing are you to adopt a pet?'),
@@ -888,7 +887,6 @@ const SHEET_COLUMNS = [
   ['s3_process_satisfaction','process_satisfaction'],
   ['s3_process_regret','process_regret'],
   ['s3_care_hard','care_hard'],
-  ['s3_no_pet_reason','no_pet_reason'],
   ['s3_first_willingness','first_willingness'],
   ['s3_first_timing','first_timing'],
   ['s3_first_reason','first_reason'],
